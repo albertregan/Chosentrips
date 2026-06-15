@@ -2,155 +2,115 @@ import { supabase } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import EnquiryForm from '@/components/EnquiryForm';
 
-export const revalidate = 0;
+export const revalidate = 0; 
 
-export default async function PackageDetailsPage({
-  params,
-}: {
-  params: { slug: string }
-}) {
-  const { data: pkg } = await supabase
-    .from('packages')
-    .select(`
-      *,
-      itineraries (*),
-      hotels (*)
-    `)
-    .eq('slug', params.slug)
-    .single();
-
+export default async function PackageDetailsPage({ params }: { params: { slug: string } }) {
+  const { data: pkg } = await supabase.from('packages').select('*').eq('slug', params.slug).single();
+  
   if (!pkg) {
     notFound();
   }
 
-  // Sort itineraries by day number
-  const itineraries = pkg.itineraries?.sort((a: any, b: any) => a.day_number - b.day_number) || [];
-  
-  // Group hotels by star rating
-  const hotels = pkg.hotels || [];
-  const stars3 = hotels.filter((h: any) => h.star_rating === 3);
-  const stars4 = hotels.filter((h: any) => h.star_rating === 4);
-  const stars5 = hotels.filter((h: any) => h.star_rating === 5);
+  const { data: itineraries } = await supabase.from('itineraries').select('*').eq('package_id', pkg.id).order('day_number', { ascending: true });
+  const { data: hotels } = await supabase.from('hotels').select('*').eq('package_id', pkg.id);
 
   return (
-    <main>
-      {/* Package Header */}
-      <div style={{
-        background: `linear-gradient(rgba(10, 25, 48, 0.7), rgba(10, 25, 48, 0.8)), url("${pkg.image_url || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2000&q=80'}") center/cover`,
-        padding: '100px 20px',
-        color: 'white'
+    <main style={{ backgroundColor: 'var(--bg-main)' }}>
+      {/* Massive Hero */}
+      <section style={{
+        position: 'relative',
+        height: '80vh',
+        minHeight: '600px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: `url("${pkg.image_url || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2560&q=80'}") center/cover no-repeat`,
       }}>
-        <div className="container">
-          <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
-            <span style={{ backgroundColor: 'var(--secondary-color)', padding: '4px 12px', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase' }}>
-              {pkg.type}
-            </span>
-          </div>
-          <h1 style={{ color: 'white', fontSize: '3.5rem', marginBottom: '20px' }}>{pkg.title}</h1>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--secondary-color)' }}>
-              From ₹{pkg.price?.toLocaleString()}
-            </div>
-            {itineraries.length > 0 && (
-              <div style={{ fontSize: '1.1rem', opacity: 0.9 }}>
-                {itineraries.length} Days / {itineraries.length - 1} Nights
-              </div>
-            )}
-          </div>
+        <div style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8))',
+          zIndex: 1
+        }}></div>
+        
+        <div className="container" style={{ position: 'relative', zIndex: 2, textAlign: 'center', color: 'white', marginTop: '100px' }}>
+          <span style={{ color: 'var(--secondary-color)', textTransform: 'uppercase', letterSpacing: '3px', fontSize: '0.8rem', display: 'block', marginBottom: '20px' }}>
+            {pkg.type} Experience
+          </span>
+          <h1 style={{ fontSize: '4.5rem', marginBottom: '20px', textShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>{pkg.title}</h1>
+          <p style={{ fontSize: '1.2rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic', opacity: 0.9 }}>
+            From ₹{pkg.price?.toLocaleString()}
+          </p>
         </div>
-      </div>
+      </section>
 
-      <div className="container py-section">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '40px', alignItems: 'start' }}>
-          
-          {/* Main Content Area */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
-            
-            <section>
-              <h2 style={{ borderBottom: '2px solid var(--secondary-color)', paddingBottom: '10px', display: 'inline-block' }}>Overview</h2>
-              <div style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-muted)', marginTop: '20px' }}>
-                {pkg.description || 'No description available for this package.'}
-              </div>
-            </section>
+      {/* Content Section */}
+      <section className="container" style={{ padding: '100px 40px', display: 'grid', gridTemplateColumns: '1fr 400px', gap: '80px' }}>
+        
+        {/* Left Col: Details */}
+        <div>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '40px' }}>The Journey</h2>
+          <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '60px', lineHeight: 2 }}>
+            {pkg.description}
+          </p>
 
-            {/* Inclusions / Exclusions */}
-            <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-              <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', padding: '24px', borderRadius: 'var(--radius-lg)' }}>
-                <h3 style={{ color: '#047857' }}>Inclusions</h3>
-                <div style={{ whiteSpace: 'pre-line' }}>{pkg.inclusions || '• Accommodation\n• Daily Breakfast\n• Transfers'}</div>
-              </div>
-              <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', padding: '24px', borderRadius: 'var(--radius-lg)' }}>
-                <h3 style={{ color: '#B91C1C' }}>Exclusions</h3>
-                <div style={{ whiteSpace: 'pre-line' }}>{pkg.exclusions || '• Flights\n• Personal Expenses\n• Visa Fees'}</div>
-              </div>
-            </section>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', marginBottom: '80px' }}>
+            <div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>Inclusions</h3>
+              <ul style={{ listStyle: 'none', color: 'var(--text-muted)' }}>
+                {pkg.inclusions?.split('\n').map((inc: string, i: number) => (
+                  <li key={i} style={{ marginBottom: '10px' }}>{inc}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>Exclusions</h3>
+              <ul style={{ listStyle: 'none', color: 'var(--text-muted)' }}>
+                {pkg.exclusions?.split('\n').map((exc: string, i: number) => (
+                  <li key={i} style={{ marginBottom: '10px' }}>{exc}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
-            {/* Day-wise Itinerary */}
-            <section>
-              <h2 style={{ borderBottom: '2px solid var(--secondary-color)', paddingBottom: '10px', display: 'inline-block' }}>Day-wise Itinerary</h2>
-              <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                {itineraries.length > 0 ? itineraries.map((day: any) => (
-                  <div key={day.id} style={{ display: 'flex', gap: '20px', backgroundColor: 'var(--bg-offset)', padding: '24px', borderRadius: 'var(--radius-lg)' }}>
-                    <div style={{ minWidth: '80px' }}>
-                      <div style={{ backgroundColor: 'var(--primary-color)', color: 'white', padding: '10px', borderRadius: 'var(--radius-sm)', textAlign: 'center', fontWeight: 'bold' }}>
-                        Day {day.day_number}
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '40px' }}>Itinerary</h2>
+          <div style={{ position: 'relative', borderLeft: '1px solid var(--border-color)', marginLeft: '20px', paddingLeft: '40px' }}>
+            {itineraries?.map((itinerary: any) => (
+              <div key={itinerary.id} style={{ marginBottom: '60px', position: 'relative' }}>
+                <div style={{ position: 'absolute', left: '-46px', top: '5px', width: '11px', height: '11px', borderRadius: '50%', background: 'var(--secondary-color)' }}></div>
+                <h4 style={{ fontSize: '1.2rem', color: 'var(--secondary-color)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px', fontFamily: 'var(--font-sans)', fontWeight: 500 }}>Day {itinerary.day_number}</h4>
+                <h3 style={{ fontSize: '1.8rem', marginBottom: '15px' }}>{itinerary.title}</h3>
+                <p style={{ color: 'var(--text-muted)' }}>{itinerary.description}</p>
+              </div>
+            ))}
+          </div>
+
+          {hotels && hotels.length > 0 && (
+            <div style={{ marginTop: '80px' }}>
+              <h2 style={{ fontSize: '2.5rem', marginBottom: '40px' }}>Accommodations</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+                {hotels.map((hotel: any) => (
+                  <div key={hotel.id} style={{ padding: '30px', border: '1px solid var(--border-color)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                      <h3 style={{ fontSize: '1.5rem', margin: 0 }}>{hotel.name}</h3>
+                      <div style={{ color: 'var(--secondary-color)' }}>
+                        {'★'.repeat(hotel.star_rating)}{'☆'.repeat(5 - hotel.star_rating)}
                       </div>
                     </div>
-                    <div>
-                      <h3 style={{ marginTop: 0 }}>{day.title}</h3>
-                      <p style={{ color: 'var(--text-muted)' }}>{day.description}</p>
-                    </div>
+                    <p style={{ color: 'var(--text-muted)', margin: 0 }}>{hotel.description}</p>
                   </div>
-                )) : (
-                  <p>Itinerary details coming soon.</p>
-                )}
+                ))}
               </div>
-            </section>
-
-            {/* Sample Hotels */}
-            <section>
-              <h2 style={{ borderBottom: '2px solid var(--secondary-color)', paddingBottom: '10px', display: 'inline-block' }}>Sample Hotels</h2>
-              <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                
-                {stars5.length > 0 && (
-                  <div className="admin-card">
-                    <h3>⭐⭐⭐⭐⭐ 5-Star Options</h3>
-                    <ul style={{ paddingLeft: '20px', marginTop: '10px' }}>
-                      {stars5.map((h: any) => <li key={h.id}><strong>{h.name}</strong> - {h.description}</li>)}
-                    </ul>
-                  </div>
-                )}
-                
-                {stars4.length > 0 && (
-                  <div className="admin-card">
-                    <h3>⭐⭐⭐⭐ 4-Star Options</h3>
-                    <ul style={{ paddingLeft: '20px', marginTop: '10px' }}>
-                      {stars4.map((h: any) => <li key={h.id}><strong>{h.name}</strong> - {h.description}</li>)}
-                    </ul>
-                  </div>
-                )}
-                
-                {stars3.length > 0 && (
-                  <div className="admin-card">
-                    <h3>⭐⭐⭐ 3-Star Options</h3>
-                    <ul style={{ paddingLeft: '20px', marginTop: '10px' }}>
-                      {stars3.map((h: any) => <li key={h.id}><strong>{h.name}</strong> - {h.description}</li>)}
-                    </ul>
-                  </div>
-                )}
-
-                {hotels.length === 0 && <p>Sample hotels will be updated soon.</p>}
-              </div>
-            </section>
-          </div>
-
-          {/* Sticky Sidebar with Enquiry Form */}
-          <div style={{ position: 'sticky', top: '20px' }}>
-            <EnquiryForm packageId={pkg.id} packageName={pkg.title} />
-          </div>
-
+            </div>
+          )}
         </div>
-      </div>
+
+        {/* Right Col: Enquiry Form */}
+        <div>
+          <EnquiryForm packageId={pkg.id} packageName={pkg.title} />
+        </div>
+        
+      </section>
     </main>
   );
 }
