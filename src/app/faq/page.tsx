@@ -10,8 +10,8 @@ export default async function FaqPage() {
     .order('order_index', { ascending: true });
 
   return (
-    <main className="pt-20 bg-surface min-h-screen">
-      <div className="bg-primary text-on-primary py-24 text-center">
+    <main className="bg-surface min-h-screen">
+      <div className="bg-primary text-on-primary pt-32 pb-20 text-center">
         <h1 className="font-display-xl text-[50px] md:text-[60px] font-bold mb-4">Frequently Asked Questions</h1>
         <p className="text-on-primary-container max-w-2xl mx-auto text-lg">Everything you need to know about booking your luxury journey with us.</p>
       </div>

@@ -8,7 +8,7 @@ export default async function Home() {
   const { data: featuredPackages } = await supabase.from('packages').select('*').limit(3).order('created_at', { ascending: false });
 
   return (
-    <main className="pt-20">
+    <main>
       {/* Hero Section */}
       <section className="relative h-screen min-h-[700px] flex items-center">
         <div className="absolute inset-0 z-0 overflow-hidden">

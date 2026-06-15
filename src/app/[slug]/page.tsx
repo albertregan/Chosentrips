@@ -20,8 +20,8 @@ export default async function DynamicPage({
   }
 
   return (
-    <main className="pt-20 bg-surface min-h-screen">
-      <div className="bg-primary py-20 text-center">
+    <main className="bg-surface min-h-screen">
+      <div className="bg-primary pt-32 pb-20 text-center">
         <h1 className="font-display-xl text-[50px] md:text-[60px] font-bold text-on-primary mb-2">{page.title}</h1>
       </div>
 

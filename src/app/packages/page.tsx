@@ -28,8 +28,8 @@ export default async function PackagesPage({
   const currentDestName = destinations?.find(d => d.slug === params.dest)?.name;
 
   return (
-    <main className="pt-20 bg-surface min-h-screen">
-      <div className="bg-primary text-on-primary py-24 text-center">
+    <main className="bg-surface min-h-screen">
+      <div className="bg-primary text-on-primary pt-32 pb-20 text-center">
         <h1 className="font-display-xl text-[50px] md:text-[60px] font-bold mb-4">Discover Your Next Journey</h1>
         <p className="text-on-primary-container max-w-2xl mx-auto text-lg">Select a destination to explore our curated luxury packages.</p>
       </div>
