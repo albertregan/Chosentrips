@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
@@ -13,6 +13,7 @@ export default function PackageForm({ initialData }: { initialData?: any }) {
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     slug: initialData?.slug || '',
+    destination_id: initialData?.destination_id || '',
     type: initialData?.type || 'international',
     price: initialData?.price || '',
     image_url: initialData?.image_url || '',
@@ -24,6 +25,16 @@ export default function PackageForm({ initialData }: { initialData?: any }) {
   const generateSlug = (title: string) => {
     return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
   };
+
+  const [destinations, setDestinations] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchDestinations() {
+      const { data } = await supabase.from('destinations').select('id, name').order('name');
+      if (data) setDestinations(data);
+    }
+    fetchDestinations();
+  }, []);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
@@ -41,6 +52,7 @@ export default function PackageForm({ initialData }: { initialData?: any }) {
 
     const payload = {
       ...formData,
+      destination_id: formData.destination_id || null,
       price: parseFloat(formData.price as string) || 0
     };
 
@@ -89,12 +101,24 @@ export default function PackageForm({ initialData }: { initialData?: any }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
+          <label className={labelClasses}>Destination</label>
+          <select required className={inputClasses} value={formData.destination_id} onChange={(e) => setFormData({...formData, destination_id: e.target.value})}>
+            <option value="">Select a destination...</option>
+            {destinations.map(dest => (
+              <option key={dest.id} value={dest.id}>{dest.name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
           <label className={labelClasses}>Type</label>
           <select required className={inputClasses} value={formData.type} onChange={(e) => setFormData({...formData, type: e.target.value})}>
             <option value="domestic">Domestic</option>
             <option value="international">International</option>
           </select>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <label className={labelClasses}>Starting Price (₹)</label>
           <input required type="number" min="0" className={inputClasses} value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} placeholder="e.g. 50000" />

@@ -5,6 +5,7 @@ export const revalidate = 0;
 
 export default async function Home() {
   const { data: testimonials } = await supabase.from('testimonials').select('*').eq('is_published', true).order('created_at', { ascending: false });
+  const { data: featuredPackages } = await supabase.from('packages').select('*').limit(3).order('created_at', { ascending: false });
 
   return (
     <main className="pt-20">
@@ -41,59 +42,28 @@ export default async function Home() {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1: Maldives */}
-          <div className="group luxury-shadow rounded-xl overflow-hidden bg-white transition-soft hover:-translate-y-2">
-            <div className="relative aspect-[16/9] overflow-hidden">
-              <img alt="Maldives" className="w-full h-full object-cover transition-soft group-hover:scale-110" src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=80" />
-            </div>
-            <div className="p-6">
-              <h3 className="font-headline-md text-[24px] font-semibold text-primary mb-1">Maldives</h3>
-              <p className="text-on-surface-variant text-body-md mb-4">Pristine turquoise waters and overwater villas.</p>
-              <div className="flex justify-between items-center pt-4 border-t border-surface-container">
-                <div>
-                  <span className="text-label-sm font-label-sm text-on-surface-variant block uppercase tracking-widest text-xs">Starting at</span>
-                  <span className="font-headline-md text-secondary font-bold text-xl">$2,499</span>
+          {featuredPackages && featuredPackages.length > 0 ? featuredPackages.map((pkg: any) => (
+            <div key={pkg.id} className="group luxury-shadow rounded-xl overflow-hidden bg-white transition-soft hover:-translate-y-2">
+              <div className="relative aspect-[16/9] overflow-hidden">
+                <img alt={pkg.title} className="w-full h-full object-cover transition-soft group-hover:scale-110" src={pkg.image_url || 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=80'} />
+              </div>
+              <div className="p-6">
+                <h3 className="font-headline-md text-[24px] font-semibold text-primary mb-1">{pkg.title}</h3>
+                <p className="text-on-surface-variant text-body-md mb-4 line-clamp-2">{pkg.description}</p>
+                <div className="flex justify-between items-center pt-4 border-t border-surface-container">
+                  <div>
+                    <span className="text-label-sm font-label-sm text-on-surface-variant block uppercase tracking-widest text-xs">Starting at</span>
+                    <span className="font-headline-md text-secondary font-bold text-xl">₹{pkg.price?.toLocaleString() || 'N/A'}</span>
+                  </div>
+                  <Link href={`/packages/${pkg.slug}`} className="border-[1.5px] border-primary text-primary px-4 py-2 rounded-lg font-bold text-body-md hover:bg-primary hover:text-on-primary transition-all">View Package</Link>
                 </div>
-                <Link href="/packages/maldives-escapade" className="border-[1.5px] border-primary text-primary px-4 py-2 rounded-lg font-bold text-body-md hover:bg-primary hover:text-on-primary transition-all">View Package</Link>
               </div>
             </div>
-          </div>
-
-          {/* Card 2: Swiss Alps */}
-          <div className="group luxury-shadow rounded-xl overflow-hidden bg-white transition-soft hover:-translate-y-2">
-            <div className="relative aspect-[16/9] overflow-hidden">
-              <img alt="Swiss Alps" className="w-full h-full object-cover transition-soft group-hover:scale-110" src="https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1200&q=80" />
+          )) : (
+            <div className="col-span-3 text-center py-12 text-on-surface-variant italic">
+              No packages available yet.
             </div>
-            <div className="p-6">
-              <h3 className="font-headline-md text-[24px] font-semibold text-primary mb-1">Swiss Alps</h3>
-              <p className="text-on-surface-variant text-body-md mb-4">Snow-capped peaks and serene Alpine valleys.</p>
-              <div className="flex justify-between items-center pt-4 border-t border-surface-container">
-                <div>
-                  <span className="text-label-sm font-label-sm text-on-surface-variant block uppercase tracking-widest text-xs">Starting at</span>
-                  <span className="font-headline-md text-secondary font-bold text-xl">$1,850</span>
-                </div>
-                <Link href="/packages/swiss-alps-retreat" className="border-[1.5px] border-primary text-primary px-4 py-2 rounded-lg font-bold text-body-md hover:bg-primary hover:text-on-primary transition-all">View Package</Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 3: Bali */}
-          <div className="group luxury-shadow rounded-xl overflow-hidden bg-white transition-soft hover:-translate-y-2">
-            <div className="relative aspect-[16/9] overflow-hidden">
-              <img alt="Bali" className="w-full h-full object-cover transition-soft group-hover:scale-110" src="https://images.unsplash.com/photo-1542315143-6903525281ac?auto=format&fit=crop&w=1200&q=80" />
-            </div>
-            <div className="p-6">
-              <h3 className="font-headline-md text-[24px] font-semibold text-primary mb-1">Bali</h3>
-              <p className="text-on-surface-variant text-body-md mb-4">Ancient traditions meeting breathtaking blossoms.</p>
-              <div className="flex justify-between items-center pt-4 border-t border-surface-container">
-                <div>
-                  <span className="text-label-sm font-label-sm text-on-surface-variant block uppercase tracking-widest text-xs">Starting at</span>
-                  <span className="font-headline-md text-secondary font-bold text-xl">$2,100</span>
-                </div>
-                <Link href="/packages/magical-bali-gateway" className="border-[1.5px] border-primary text-primary px-4 py-2 rounded-lg font-bold text-body-md hover:bg-primary hover:text-on-primary transition-all">View Package</Link>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 

@@ -6,7 +6,7 @@ export const revalidate = 0;
 export default async function PackagesPage() {
   const { data: packages } = await supabase
     .from('packages')
-    .select('*')
+    .select('*, destinations(name)')
     .order('created_at', { ascending: false });
 
   return (
@@ -28,7 +28,7 @@ export default async function PackagesPage() {
             <tr className="bg-surface-container-low text-on-surface-variant text-sm tracking-widest uppercase border-b border-surface-variant">
               <th className="p-5 font-bold">Image</th>
               <th className="p-5 font-bold">Title & Slug</th>
-              <th className="p-5 font-bold">Type</th>
+              <th className="p-5 font-bold">Destination</th>
               <th className="p-5 font-bold">Price</th>
               <th className="p-5 font-bold text-right">Actions</th>
             </tr>
@@ -46,7 +46,7 @@ export default async function PackagesPage() {
                   </td>
                   <td className="p-5">
                     <span className="bg-secondary-container/20 text-secondary-fixed font-bold px-3 py-1 rounded-full text-xs uppercase tracking-widest border border-secondary-container/50">
-                      {pkg.type}
+                      {pkg.destinations?.name || 'Unassigned'}
                     </span>
                   </td>
                   <td className="p-5 font-bold text-primary">₹{pkg.price?.toLocaleString() || 'N/A'}</td>

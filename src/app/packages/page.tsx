@@ -4,29 +4,28 @@ import PlanMyTripButton from '@/components/PlanMyTripButton';
 
 export const revalidate = 0; 
 
-// Mock destinations since we don't have a destinations table
-const DESTINATIONS = [
-  { name: 'Maldives', image: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Swiss Alps', image: 'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Bali', image: 'https://images.unsplash.com/photo-1542315143-6903525281ac?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Dubai', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80' },
-  { name: 'Kashmir', image: 'https://images.unsplash.com/photo-1566996694954-90b052c413c4?auto=format&fit=crop&w=800&q=80' }
-];
-
 export default async function PackagesPage({
   searchParams,
 }: {
   searchParams: Promise<{ dest?: string }>
 }) {
   const params = await searchParams;
-  let query = supabase.from('packages').select('*').order('created_at', { ascending: false });
+  
+  // Fetch real destinations from the database
+  const { data: destinations } = await supabase.from('destinations').select('*').order('name');
+  
+  // Fetch packages, optionally filtered by destination
+  let query = supabase.from('packages').select('*, destinations!inner(slug)').order('created_at', { ascending: false });
   
   if (params.dest) {
-    // Basic text search to filter by destination if it's in the title
-    query = query.ilike('title', `%${params.dest}%`);
+    // Filter by the foreign key relation's slug
+    query = query.eq('destinations.slug', params.dest);
   }
 
-  const { data: packages } = await query;
+  const { data: packages, error } = await query;
+  
+  // Find the currently selected destination name for the UI
+  const currentDestName = destinations?.find(d => d.slug === params.dest)?.name;
 
   return (
     <main className="pt-20 bg-surface min-h-screen">
@@ -47,12 +46,12 @@ export default async function PackagesPage({
                 <span className="text-white font-bold text-lg tracking-wider uppercase">All</span>
               </div>
             </Link>
-            {DESTINATIONS.map(dest => (
-              <Link key={dest.name} href={`/packages?dest=${dest.name}`} className={`relative rounded-xl overflow-hidden aspect-square luxury-shadow group ${params.dest === dest.name ? 'ring-4 ring-secondary-container' : ''}`}>
-                <img src={dest.image} alt={dest.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+            {destinations && destinations.map((dest: any) => (
+              <Link key={dest.id} href={`/packages?dest=${dest.slug}`} className={`relative rounded-xl overflow-hidden aspect-square luxury-shadow group ${params.dest === dest.slug ? 'ring-4 ring-secondary-container' : ''}`}>
+                <img src={dest.image_url || 'https://via.placeholder.com/800'} alt={dest.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent z-10"></div>
                 <div className="absolute inset-0 z-20 flex items-end justify-center pb-6">
-                  <span className="text-white font-bold text-lg">{dest.name}</span>
+                  <span className="text-white font-bold text-lg text-center px-2">{dest.name}</span>
                 </div>
               </Link>
             ))}
@@ -62,7 +61,7 @@ export default async function PackagesPage({
         {/* Packages Grid */}
         <div>
           <h2 className="font-headline-md text-[24px] font-bold text-primary mb-6">
-            {params.dest ? `Packages for ${params.dest}` : 'All Curated Packages'}
+            {currentDestName ? `Packages for ${currentDestName}` : 'All Curated Packages'}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -96,7 +95,7 @@ export default async function PackagesPage({
               </div>
             )) : (
               <div className="col-span-full py-12 text-center text-on-surface-variant">
-                No packages found for this destination. Please try another.
+                {error?.message ? `Error: ${error.message}` : 'No packages found for this destination. Please try another.'}
               </div>
             )}
           </div>
