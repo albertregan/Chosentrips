@@ -27,12 +27,12 @@ export default function RootLayout({
         }}>
           <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Link href="/">
-              <img src="/logo.png" alt="Chosen Trips Logo" style={{ height: '40px', width: 'auto' }} />
+              <img src="/logo.png" alt="Chosen Trips Logo" style={{ height: '120px', width: 'auto' }} />
             </Link>
             <nav style={{ display: 'flex', gap: '40px', alignItems: 'center', fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
               <Link href="/packages" className="nav-link">Destinations</Link>
-              <Link href="/contact-us" className="nav-link">Enquire</Link>
-              <Link href="/admin" style={{ opacity: 0.5 }}>Admin</Link>
+              <Link href="/about-us" className="nav-link">About Us</Link>
+              <Link href="/contact-us" className="btn btn-gold" style={{ padding: '10px 20px', fontSize: '0.75rem' }}>Plan My Trip</Link>
             </nav>
           </div>
         </header>
@@ -46,7 +46,7 @@ export default function RootLayout({
         }}>
           <div className="container">
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '30px', marginBottom: '80px' }}>
-              <img src="/logo.png" alt="Chosen Trips Logo" style={{ height: '60px', width: 'auto', filter: 'brightness(0) invert(1)', opacity: 0.8 }} />
+              <img src="/logo.png" alt="Chosen Trips Logo" style={{ height: '180px', width: 'auto', filter: 'brightness(0) invert(1)', opacity: 0.9 }} />
               <p style={{ color: 'var(--text-muted)', maxWidth: '400px', fontSize: '0.9rem' }}>
                 Curating the world's most extraordinary travel experiences for the discerning explorer.
               </p>
