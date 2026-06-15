@@ -5,8 +5,9 @@ import PlanMyTripButton from '@/components/PlanMyTripButton';
 
 export const revalidate = 0; 
 
-export default async function PackageDetailsPage({ params }: { params: { slug: string } }) {
-  const { data: pkg } = await supabase.from('packages').select('*').eq('slug', params.slug).single();
+export default async function PackageDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const { data: pkg } = await supabase.from('packages').select('*').eq('slug', slug).single();
   
   if (!pkg) {
     notFound();

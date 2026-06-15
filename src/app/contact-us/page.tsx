@@ -2,11 +2,12 @@ import EnquiryForm from '@/components/EnquiryForm';
 
 export const revalidate = 0;
 
-export default function ContactUsPage({
+export default async function ContactUsPage({
   searchParams,
 }: {
-  searchParams: { packageId?: string, packageName?: string }
+  searchParams: Promise<{ packageId?: string, packageName?: string }>
 }) {
+  const params = await searchParams;
   return (
     <main className="bg-surface min-h-screen">
       {/* Cinematic Hero */}
@@ -57,7 +58,7 @@ export default function ContactUsPage({
         {/* Right Col: Enquiry Form */}
         <div>
           <div className="md:-mt-48 relative z-30">
-            <EnquiryForm packageId={searchParams.packageId} packageName={searchParams.packageName} />
+            <EnquiryForm packageId={params.packageId} packageName={params.packageName} />
           </div>
         </div>
         

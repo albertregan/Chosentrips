@@ -6,12 +6,13 @@ export const revalidate = 3600; // Cache for 1 hour
 export default async function DynamicPage({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }) {
+  const { slug } = await params;
   const { data: page } = await supabase
     .from('pages')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (!page) {
@@ -19,17 +20,13 @@ export default async function DynamicPage({
   }
 
   return (
-    <main>
-      <div style={{ backgroundColor: 'var(--primary-color)', padding: '60px 0', color: 'white', textAlign: 'center' }}>
-        <h1 style={{ color: 'white', marginBottom: '0' }}>{page.title}</h1>
+    <main className="pt-20 bg-surface min-h-screen">
+      <div className="bg-primary py-20 text-center">
+        <h1 className="font-display-xl text-[50px] md:text-[60px] font-bold text-on-primary mb-2">{page.title}</h1>
       </div>
 
-      <div className="container py-section">
-        <div 
-          className="admin-card" 
-          style={{ maxWidth: '800px', margin: '0 auto', fontSize: '1.1rem', lineHeight: '1.8' }}
-        >
-          {/* In a real app, you might want to use a Markdown or HTML parser here securely */}
+      <div className="max-w-[800px] mx-auto px-margin-desktop py-16">
+        <div className="bg-white p-8 md:p-12 rounded-2xl luxury-shadow border border-surface-variant text-on-surface text-lg leading-relaxed">
           <div style={{ whiteSpace: 'pre-line' }}>
             {page.content || 'Content coming soon.'}
           </div>
