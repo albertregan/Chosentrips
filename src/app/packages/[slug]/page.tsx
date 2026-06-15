@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
-import EnquiryForm from '@/components/EnquiryForm';
+import Link from 'next/link';
 
 export const revalidate = 0; 
 
@@ -15,100 +15,106 @@ export default async function PackageDetailsPage({ params }: { params: { slug: s
   const { data: hotels } = await supabase.from('hotels').select('*').eq('package_id', pkg.id);
 
   return (
-    <main style={{ backgroundColor: 'var(--bg-main)' }}>
+    <main className="bg-surface min-h-screen">
       {/* Massive Hero */}
-      <section style={{
-        position: 'relative',
-        height: '80vh',
-        minHeight: '600px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: `url("${pkg.image_url || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2560&q=80'}") center/cover no-repeat`,
-      }}>
-        <div style={{
-          position: 'absolute',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8))',
-          zIndex: 1
-        }}></div>
+      <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center">
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/80 z-10"></div>
+          <img alt={pkg.title} className="w-full h-full object-cover" src={pkg.image_url || 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2560&q=80'} />
+        </div>
         
-        <div className="container" style={{ position: 'relative', zIndex: 2, textAlign: 'center', color: 'white', marginTop: '100px' }}>
-          <span style={{ color: 'var(--secondary-color)', textTransform: 'uppercase', letterSpacing: '3px', fontSize: '0.8rem', display: 'block', marginBottom: '20px' }}>
+        <div className="relative z-20 container max-w-container-max mx-auto px-margin-desktop text-center text-white mt-20">
+          <span className="text-secondary-fixed tracking-[3px] uppercase text-sm block mb-4 font-bold">
             {pkg.type} Experience
           </span>
-          <h1 style={{ fontSize: '4.5rem', marginBottom: '20px', textShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>{pkg.title}</h1>
-          <p style={{ fontSize: '1.2rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic', opacity: 0.9 }}>
+          <h1 className="font-display-xl text-[60px] leading-[72px] font-bold mb-6 drop-shadow-2xl">
+            {pkg.title}
+          </h1>
+          <p className="text-xl italic opacity-90">
             From ₹{pkg.price?.toLocaleString()}
           </p>
         </div>
       </section>
 
       {/* Content Section */}
-      <section className="container" style={{ padding: '100px 40px', display: 'grid', gridTemplateColumns: '1fr 400px', gap: '80px' }}>
+      <section className="max-w-container-max mx-auto px-margin-desktop py-24">
         
-        {/* Left Col: Details */}
-        <div>
-          <h2 style={{ fontSize: '2.5rem', marginBottom: '40px' }}>The Journey</h2>
-          <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '60px', lineHeight: 2 }}>
-            {pkg.description}
-          </p>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', marginBottom: '80px' }}>
-            <div>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>Inclusions</h3>
-              <ul style={{ listStyle: 'none', color: 'var(--text-muted)' }}>
-                {pkg.inclusions?.split('\n').map((inc: string, i: number) => (
-                  <li key={i} style={{ marginBottom: '10px' }}>{inc}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '20px', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>Exclusions</h3>
-              <ul style={{ listStyle: 'none', color: 'var(--text-muted)' }}>
-                {pkg.exclusions?.split('\n').map((exc: string, i: number) => (
-                  <li key={i} style={{ marginBottom: '10px' }}>{exc}</li>
-                ))}
-              </ul>
-            </div>
+        {/* Header Action Row */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 pb-8 border-b border-surface-variant gap-6">
+          <div>
+            <h2 className="font-headline-lg text-[40px] font-bold text-primary">The Journey</h2>
+            <p className="text-on-surface-variant max-w-3xl mt-4 text-lg leading-relaxed">{pkg.description}</p>
           </div>
+          <Link href={`/contact-us?packageId=${pkg.id}&packageName=${encodeURIComponent(pkg.title)}`} className="bg-primary text-on-primary px-8 py-4 rounded-lg font-bold hover:scale-[1.02] transition-transform luxury-shadow whitespace-nowrap">
+            Plan This Trip
+          </Link>
+        </div>
 
-          <h2 style={{ fontSize: '2.5rem', marginBottom: '40px' }}>Itinerary</h2>
-          <div style={{ position: 'relative', borderLeft: '1px solid var(--border-color)', marginLeft: '20px', paddingLeft: '40px' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+          <div className="bg-surface-container-low p-8 rounded-2xl border border-surface-variant">
+            <h3 className="font-headline-md text-[24px] font-bold text-primary mb-6 flex items-center gap-2">
+              <span className="material-symbols-outlined text-secondary">check_circle</span>
+              Inclusions
+            </h3>
+            <ul className="space-y-3 text-on-surface-variant">
+              {pkg.inclusions?.split('\n').map((inc: string, i: number) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="text-secondary mt-1">•</span>
+                  <span>{inc}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="bg-surface-container-low p-8 rounded-2xl border border-surface-variant">
+            <h3 className="font-headline-md text-[24px] font-bold text-primary mb-6 flex items-center gap-2">
+              <span className="material-symbols-outlined text-error">cancel</span>
+              Exclusions
+            </h3>
+            <ul className="space-y-3 text-on-surface-variant">
+              {pkg.exclusions?.split('\n').map((exc: string, i: number) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="text-error mt-1">•</span>
+                  <span>{exc}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Itinerary */}
+        <div className="mb-20">
+          <h2 className="font-headline-lg text-[40px] font-bold text-primary mb-12">Itinerary</h2>
+          <div className="relative border-l-2 border-surface-variant ml-4 md:ml-6 space-y-12 pb-8">
             {itineraries?.map((itinerary: any) => (
-              <div key={itinerary.id} style={{ marginBottom: '60px', position: 'relative' }}>
-                <div style={{ position: 'absolute', left: '-46px', top: '5px', width: '11px', height: '11px', borderRadius: '50%', background: 'var(--secondary-color)' }}></div>
-                <h4 style={{ fontSize: '1.2rem', color: 'var(--secondary-color)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px', fontFamily: 'var(--font-sans)', fontWeight: 500 }}>Day {itinerary.day_number}</h4>
-                <h3 style={{ fontSize: '1.8rem', marginBottom: '15px' }}>{itinerary.title}</h3>
-                <p style={{ color: 'var(--text-muted)' }}>{itinerary.description}</p>
+              <div key={itinerary.id} className="relative pl-10 md:pl-16">
+                <div className="absolute left-[-9px] top-1 w-4 h-4 rounded-full bg-secondary ring-4 ring-surface"></div>
+                <h4 className="text-secondary font-bold uppercase tracking-widest text-sm mb-2">Day {itinerary.day_number}</h4>
+                <h3 className="font-headline-md text-[24px] font-bold text-primary mb-3">{itinerary.title}</h3>
+                <p className="text-on-surface-variant leading-relaxed max-w-4xl">{itinerary.description}</p>
               </div>
             ))}
           </div>
+        </div>
 
-          {hotels && hotels.length > 0 && (
-            <div style={{ marginTop: '80px' }}>
-              <h2 style={{ fontSize: '2.5rem', marginBottom: '40px' }}>Accommodations</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-                {hotels.map((hotel: any) => (
-                  <div key={hotel.id} style={{ padding: '30px', border: '1px solid var(--border-color)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-                      <h3 style={{ fontSize: '1.5rem', margin: 0 }}>{hotel.name}</h3>
-                      <div style={{ color: 'var(--secondary-color)' }}>
-                        {'★'.repeat(hotel.star_rating)}{'☆'.repeat(5 - hotel.star_rating)}
-                      </div>
+        {/* Accommodations */}
+        {hotels && hotels.length > 0 && (
+          <div>
+            <h2 className="font-headline-lg text-[40px] font-bold text-primary mb-10">Accommodations</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {hotels.map((hotel: any) => (
+                <div key={hotel.id} className="bg-white p-6 rounded-xl luxury-shadow border border-surface-variant flex flex-col">
+                  <div className="flex justify-between items-start mb-4">
+                    <h3 className="font-headline-md text-xl font-bold text-primary">{hotel.name}</h3>
+                    <div className="flex text-secondary text-sm">
+                      {'★'.repeat(hotel.star_rating)}{'☆'.repeat(5 - hotel.star_rating)}
                     </div>
-                    <p style={{ color: 'var(--text-muted)', margin: 0 }}>{hotel.description}</p>
                   </div>
-                ))}
-              </div>
+                  <p className="text-on-surface-variant text-sm flex-grow">{hotel.description}</p>
+                </div>
+              ))}
             </div>
-          )}
-        </div>
-
-        {/* Right Col: Enquiry Form */}
-        <div>
-          <EnquiryForm packageId={pkg.id} packageName={pkg.title} />
-        </div>
+          </div>
+        )}
         
       </section>
     </main>

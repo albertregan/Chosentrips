@@ -2,60 +2,52 @@ import EnquiryForm from '@/components/EnquiryForm';
 
 export const revalidate = 0;
 
-export default function ContactUsPage() {
+export default function ContactUsPage({
+  searchParams,
+}: {
+  searchParams: { packageId?: string, packageName?: string }
+}) {
   return (
-    <main style={{ backgroundColor: 'var(--bg-main)' }}>
+    <main className="bg-surface min-h-screen">
       {/* Cinematic Hero */}
-      <section style={{
-        position: 'relative',
-        height: '60vh',
-        minHeight: '400px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'url("https://images.unsplash.com/photo-1542314831-c6a4d1421008?auto=format&fit=crop&w=2560&q=80") center/cover no-repeat',
-      }}>
-        <div style={{
-          position: 'absolute',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7))',
-          zIndex: 1
-        }}></div>
+      <section className="relative h-[60vh] min-h-[400px] flex items-center justify-center">
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/80 z-10"></div>
+          <img alt="Plan your trip" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1542314831-c6a4d1421008?auto=format&fit=crop&w=2560&q=80" />
+        </div>
         
-        <div className="container" style={{ position: 'relative', zIndex: 2, textAlign: 'center', color: 'white', marginTop: '100px' }}>
-          <h1 style={{ fontSize: '4.5rem', marginBottom: '20px', textShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>Plan Your Trip</h1>
-          <p style={{ fontSize: '1.2rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic', opacity: 0.9 }}>
-            Let us curate your next masterpiece.
-          </p>
+        <div className="relative z-20 container max-w-container-max mx-auto px-margin-desktop text-center text-white mt-20">
+          <h1 className="font-display-xl text-[50px] md:text-[60px] font-bold mb-4 drop-shadow-2xl">Plan Your Trip</h1>
+          <p className="text-xl italic opacity-90">Let us curate your next masterpiece.</p>
         </div>
       </section>
 
       {/* Content Section */}
-      <section className="container" style={{ padding: '100px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px' }}>
+      <section className="max-w-container-max mx-auto px-margin-desktop py-24 grid grid-cols-1 md:grid-cols-2 gap-16">
         
         {/* Left Col: Info */}
-        <div style={{ paddingRight: '40px' }}>
-          <span style={{ color: 'var(--secondary-color)', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.8rem', display: 'block', marginBottom: '20px' }}>Get in Touch</span>
-          <h2 style={{ fontSize: '3rem', marginBottom: '40px', lineHeight: 1.2 }}>Begin the extraordinary.</h2>
+        <div className="pr-0 md:pr-10">
+          <span className="text-secondary font-bold uppercase tracking-widest text-sm mb-4 block">Get in Touch</span>
+          <h2 className="font-headline-lg text-[40px] font-bold text-primary leading-tight mb-6">Begin the extraordinary.</h2>
           
-          <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '60px', lineHeight: 2 }}>
+          <p className="text-on-surface-variant text-lg leading-relaxed mb-12">
             Whether you have a specific destination in mind or you are seeking inspiration, our team of expert travel curators is at your disposal. Fill out the comprehensive planner, and we will begin designing an itinerary tailored exclusively to you.
           </p>
 
-          <div style={{ marginBottom: '40px' }}>
-            <h4 style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Email Us</h4>
-            <a href="mailto:concierge@chosentrips.com" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', borderBottom: '1px solid var(--border-color)', paddingBottom: '5px' }}>concierge@chosentrips.com</a>
+          <div className="mb-10">
+            <h4 className="font-bold text-primary uppercase tracking-widest text-sm mb-2">Email Us</h4>
+            <a href="mailto:concierge@chosentrips.com" className="text-xl text-on-surface hover:text-secondary transition-colors border-b border-surface-variant pb-1">concierge@chosentrips.com</a>
           </div>
 
-          <div style={{ marginBottom: '40px' }}>
-            <h4 style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Call Us</h4>
-            <p style={{ fontSize: '1.2rem', color: 'var(--text-dark)' }}>+1 (800) 123-CHOSEN</p>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Available 24/7 for our elite members.</p>
+          <div className="mb-10">
+            <h4 className="font-bold text-primary uppercase tracking-widest text-sm mb-2">Call Us</h4>
+            <p className="text-xl text-on-surface mb-1">+1 (800) 123-CHOSEN</p>
+            <p className="text-on-surface-variant text-sm">Available 24/7 for our elite members.</p>
           </div>
 
           <div>
-            <h4 style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Global Headquarters</h4>
-            <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', lineHeight: 1.8 }}>
+            <h4 className="font-bold text-primary uppercase tracking-widest text-sm mb-2">Global Headquarters</h4>
+            <p className="text-on-surface-variant text-lg leading-relaxed">
               150 Luxury Avenue, Suite 400<br />
               New York, NY 10019
             </p>
@@ -64,8 +56,8 @@ export default function ContactUsPage() {
 
         {/* Right Col: Enquiry Form */}
         <div>
-          <div style={{ marginTop: '-200px', position: 'relative', zIndex: 10 }}>
-            <EnquiryForm />
+          <div className="md:-mt-48 relative z-30">
+            <EnquiryForm packageId={searchParams.packageId} packageName={searchParams.packageName} />
           </div>
         </div>
         

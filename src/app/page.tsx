@@ -7,143 +7,164 @@ export default async function Home() {
   const { data: testimonials } = await supabase.from('testimonials').select('*').eq('is_published', true).order('created_at', { ascending: false });
 
   return (
-    <main>
-      {/* Cinematic Hero Section */}
-      <section style={{
-        position: 'relative',
-        height: '100vh',
-        minHeight: '800px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'url("https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=2560&q=80") center/cover no-repeat',
-      }}>
-        <div style={{
-          position: 'absolute',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6))',
-          zIndex: 1
-        }}></div>
-        
-        <div className="container fade-in" style={{ position: 'relative', zIndex: 2, textAlign: 'center', color: 'white' }}>
-          <h1 style={{ 
-            fontSize: '5rem', 
-            color: 'white', 
-            marginBottom: '30px', 
-            maxWidth: '900px', 
-            margin: '0 auto 30px',
-            textShadow: '0 10px 30px rgba(0,0,0,0.5)'
-          }}>
-            Your Journey,<br />Chosen With Care.
+    <main className="pt-20">
+      {/* Hero Section */}
+      <section className="relative h-screen min-h-[700px] flex items-center">
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute inset-0 hero-gradient z-10"></div>
+          <img alt="Santorini Sunset" className="w-full h-full object-cover scale-105" src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=2560&q=80" />
+        </div>
+        <div className="relative z-20 w-full px-margin-desktop max-w-container-max mx-auto text-center md:text-left">
+          <h1 className="text-white font-display-xl text-[60px] leading-[72px] font-bold max-w-3xl mb-8 leading-tight">
+            Adventure Awaits, <span className="text-secondary-container">Chosen</span> for You
           </h1>
-          <p style={{ 
-            fontSize: '1.1rem', 
-            maxWidth: '500px', 
-            margin: '0 auto 50px', 
-            opacity: 0.9,
-            letterSpacing: '1px',
-            lineHeight: 2
-          }}>
+          <p className="text-white text-lg max-w-xl mb-12 opacity-90 leading-relaxed">
             Extraordinary, hand-crafted experiences designed for the discerning traveler.
           </p>
-          <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
-            <Link href="/packages" className="btn btn-gold">
-              Discover Destinations
-            </Link>
-          </div>
+          <Link href="/packages" className="inline-block bg-primary text-on-primary px-10 h-[56px] leading-[56px] rounded-lg font-bold hover:bg-opacity-90 transition-all luxury-shadow">
+            Discover Destinations
+          </Link>
         </div>
       </section>
 
-      {/* Editorial Featured Section */}
-      <section className="py-section container">
-        <div style={{ textAlign: 'center', marginBottom: '80px', maxWidth: '700px', margin: '0 auto 80px' }}>
-          <span style={{ color: 'var(--secondary-color)', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.8rem' }}>Curated Experiences</span>
-          <h2 style={{ fontSize: '3rem', marginTop: '20px' }}>Exceptional Journeys</h2>
-        </div>
-
-        <div className="magazine-grid">
-          
-          {/* Editorial Block 1 - Bali */}
-          <div style={{ gridColumn: '1 / 8', position: 'relative', height: '600px', background: 'url("https://images.unsplash.com/photo-1542315143-6903525281ac?auto=format&fit=crop&w=1200&q=80") center/cover' }}>
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '40px', background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)', color: 'white' }}>
-              <h3 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '10px' }}>Magical Bali</h3>
-              <Link href="/packages/magical-bali-gateway" style={{ borderBottom: '1px solid var(--secondary-color)', color: 'var(--secondary-color)', paddingBottom: '5px', textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px' }}>Explore Experience</Link>
-            </div>
+      {/* Featured Packages */}
+      <section className="py-24 px-margin-desktop max-w-container-max mx-auto">
+        <div className="flex justify-between items-end mb-12">
+          <div>
+            <h2 className="font-headline-lg text-[40px] font-bold text-primary mb-2">Curated Destinations</h2>
+            <p className="text-on-surface-variant max-w-xl">Each journey is meticulously planned by our experts to ensure an unparalleled experience of luxury and discovery.</p>
           </div>
-          <div style={{ gridColumn: '8 / 13', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 40px' }}>
-            <h3 style={{ fontSize: '2rem', marginBottom: '20px' }}>Serenity in Seminyak</h3>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '30px' }}>Discover the perfect blend of spiritual awakening and absolute luxury in our hand-picked Balinese villas. Every detail is curated to ensure a transcendent getaway.</p>
-          </div>
-
-          {/* Editorial Block 2 - Swiss Alps */}
-          <div style={{ gridColumn: '1 / 6', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 40px', marginTop: '60px' }}>
-            <h3 style={{ fontSize: '2rem', marginBottom: '20px' }}>The Alps Await</h3>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '30px' }}>Breathe in the crisp mountain air. Traverse the snow-capped peaks of Switzerland with our exclusive train passes and premium ski lodge accommodations.</p>
-          </div>
-          <div style={{ gridColumn: '6 / 13', position: 'relative', height: '600px', background: 'url("https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1200&q=80") center/cover', marginTop: '60px' }}>
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '40px', background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)', color: 'white' }}>
-              <h3 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '10px' }}>Swiss Retreat</h3>
-              <Link href="/packages/swiss-alps-retreat" style={{ borderBottom: '1px solid var(--secondary-color)', color: 'var(--secondary-color)', paddingBottom: '5px', textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px' }}>Explore Experience</Link>
-            </div>
-          </div>
-
-          {/* Editorial Block 3 - Kashmir */}
-          <div style={{ gridColumn: '1 / 8', position: 'relative', height: '600px', background: 'url("https://images.unsplash.com/photo-1566996694954-90b052c413c4?auto=format&fit=crop&w=1200&q=80") center/cover', marginTop: '60px' }}>
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '40px', background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)', color: 'white' }}>
-              <h3 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '10px' }}>Majestic Kashmir</h3>
-              <Link href="/packages/majestic-kashmir" style={{ borderBottom: '1px solid var(--secondary-color)', color: 'var(--secondary-color)', paddingBottom: '5px', textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px' }}>Explore Experience</Link>
-            </div>
-          </div>
-          <div style={{ gridColumn: '8 / 13', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 40px', marginTop: '60px' }}>
-            <h3 style={{ fontSize: '2rem', marginBottom: '20px' }}>Heaven on Earth</h3>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '30px' }}>Experience the unparalleled beauty of Kashmir. Stay in a luxury houseboat on Dal Lake and witness the majestic Himalayas.</p>
-          </div>
-
-          {/* Editorial Block 4 - Dubai */}
-          <div style={{ gridColumn: '1 / 6', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 40px', marginTop: '60px' }}>
-            <h3 style={{ fontSize: '2rem', marginBottom: '20px' }}>Desert Opulence</h3>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '30px' }}>Embrace the modern marvels and ancient sands. From towering skyscrapers to exclusive desert safaris, Dubai is the pinnacle of luxury.</p>
-          </div>
-          <div style={{ gridColumn: '6 / 13', position: 'relative', height: '600px', background: 'url("https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80") center/cover', marginTop: '60px' }}>
-            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '40px', background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)', color: 'white' }}>
-              <h3 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '10px' }}>Dubai Escapade</h3>
-              <Link href="/packages/dubai-luxury-escapade" style={{ borderBottom: '1px solid var(--secondary-color)', color: 'var(--secondary-color)', paddingBottom: '5px', textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px' }}>Explore Experience</Link>
-            </div>
-          </div>
-
+          <Link href="/packages" className="text-secondary font-bold flex items-center gap-2 group hidden md:flex">
+            See all destinations
+            <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          </Link>
         </div>
         
-        <div className="text-center" style={{ marginTop: '120px' }}>
-          <Link href="/packages" className="btn btn-primary" style={{ padding: '20px 60px', fontSize: '1rem' }}>View All Packages</Link>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Card 1: Maldives */}
+          <div className="group luxury-shadow rounded-xl overflow-hidden bg-white transition-soft hover:-translate-y-2">
+            <div className="relative aspect-[16/9] overflow-hidden">
+              <img alt="Maldives" className="w-full h-full object-cover transition-soft group-hover:scale-110" src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=80" />
+            </div>
+            <div className="p-6">
+              <h3 className="font-headline-md text-[24px] font-semibold text-primary mb-1">Maldives</h3>
+              <p className="text-on-surface-variant text-body-md mb-4">Pristine turquoise waters and overwater villas.</p>
+              <div className="flex justify-between items-center pt-4 border-t border-surface-container">
+                <div>
+                  <span className="text-label-sm font-label-sm text-on-surface-variant block uppercase tracking-widest text-xs">Starting at</span>
+                  <span className="font-headline-md text-secondary font-bold text-xl">$2,499</span>
+                </div>
+                <Link href="/packages/maldives-escapade" className="border-[1.5px] border-primary text-primary px-4 py-2 rounded-lg font-bold text-body-md hover:bg-primary hover:text-on-primary transition-all">View Package</Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 2: Swiss Alps */}
+          <div className="group luxury-shadow rounded-xl overflow-hidden bg-white transition-soft hover:-translate-y-2">
+            <div className="relative aspect-[16/9] overflow-hidden">
+              <img alt="Swiss Alps" className="w-full h-full object-cover transition-soft group-hover:scale-110" src="https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1200&q=80" />
+            </div>
+            <div className="p-6">
+              <h3 className="font-headline-md text-[24px] font-semibold text-primary mb-1">Swiss Alps</h3>
+              <p className="text-on-surface-variant text-body-md mb-4">Snow-capped peaks and serene Alpine valleys.</p>
+              <div className="flex justify-between items-center pt-4 border-t border-surface-container">
+                <div>
+                  <span className="text-label-sm font-label-sm text-on-surface-variant block uppercase tracking-widest text-xs">Starting at</span>
+                  <span className="font-headline-md text-secondary font-bold text-xl">$1,850</span>
+                </div>
+                <Link href="/packages/swiss-alps-retreat" className="border-[1.5px] border-primary text-primary px-4 py-2 rounded-lg font-bold text-body-md hover:bg-primary hover:text-on-primary transition-all">View Package</Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 3: Bali */}
+          <div className="group luxury-shadow rounded-xl overflow-hidden bg-white transition-soft hover:-translate-y-2">
+            <div className="relative aspect-[16/9] overflow-hidden">
+              <img alt="Bali" className="w-full h-full object-cover transition-soft group-hover:scale-110" src="https://images.unsplash.com/photo-1542315143-6903525281ac?auto=format&fit=crop&w=1200&q=80" />
+            </div>
+            <div className="p-6">
+              <h3 className="font-headline-md text-[24px] font-semibold text-primary mb-1">Bali</h3>
+              <p className="text-on-surface-variant text-body-md mb-4">Ancient traditions meeting breathtaking blossoms.</p>
+              <div className="flex justify-between items-center pt-4 border-t border-surface-container">
+                <div>
+                  <span className="text-label-sm font-label-sm text-on-surface-variant block uppercase tracking-widest text-xs">Starting at</span>
+                  <span className="font-headline-md text-secondary font-bold text-xl">$2,100</span>
+                </div>
+                <Link href="/packages/magical-bali-gateway" className="border-[1.5px] border-primary text-primary px-4 py-2 rounded-lg font-bold text-body-md hover:bg-primary hover:text-on-primary transition-all">View Package</Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section style={{ backgroundColor: 'var(--bg-dark)', color: 'white', padding: '120px 0' }}>
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-            <span style={{ color: 'var(--secondary-color)', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.8rem' }}>Guest Stories</span>
-            <h2 style={{ fontSize: '3rem', marginTop: '20px' }}>Words From Our Travelers</h2>
+      {/* Why Choose Us */}
+      <section className="bg-primary text-on-primary py-24 mb-16">
+        <div className="px-margin-desktop max-w-container-max mx-auto text-center">
+          <h2 className="font-headline-lg text-[40px] font-bold mb-16">The Chosen Difference</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+            <div className="flex flex-col items-center">
+              <div className="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mb-6 luxury-shadow">
+                <span className="material-symbols-outlined text-primary text-[40px]">workspace_premium</span>
+              </div>
+              <h3 className="font-headline-md text-[24px] font-semibold mb-3 text-on-primary">Expert Guidance</h3>
+              <p className="text-on-primary-container leading-relaxed">Dedicated travel concierges who live and breathe your chosen destinations.</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mb-6 luxury-shadow">
+                <span className="material-symbols-outlined text-primary text-[40px]">event_available</span>
+              </div>
+              <h3 className="font-headline-md text-[24px] font-semibold mb-3 text-on-primary">Seamless Planning</h3>
+              <p className="text-on-primary-container leading-relaxed">From first-class flights to private transfers, we handle every micro-detail.</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="w-20 h-20 bg-secondary-container rounded-full flex items-center justify-center mb-6 luxury-shadow">
+                <span className="material-symbols-outlined text-primary text-[40px]">loyalty</span>
+              </div>
+              <h3 className="font-headline-md text-[24px] font-semibold mb-3 text-on-primary">Exclusive Deals</h3>
+              <p className="text-on-primary-container leading-relaxed">Access to unique experiences and rates unavailable to the general public.</p>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '40px' }}>
-            {testimonials && testimonials.length > 0 ? testimonials.map((testimonial: any) => (
-              <div key={testimonial.id} style={{ border: '1px solid rgba(255,255,255,0.1)', padding: '50px 40px', position: 'relative' }}>
-                <span style={{ position: 'absolute', top: '20px', left: '30px', fontSize: '4rem', color: 'var(--secondary-color)', opacity: 0.3, fontFamily: 'var(--font-serif)', lineHeight: 1 }}>"</span>
-                <p style={{ fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '30px', position: 'relative', zIndex: 2, fontStyle: 'italic', color: '#DDDDDD' }}>
-                  {testimonial.review_content}
-                </p>
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '20px' }}>
-                  <h4 style={{ fontSize: '1.1rem', marginBottom: '5px', fontFamily: 'var(--font-serif)' }}>{testimonial.guest_name}</h4>
-                  <span style={{ color: 'var(--secondary-color)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Traveled to {testimonial.destination}</span>
-                </div>
+      {/* Testimonials (Tailwind) */}
+      <section className="py-24 px-margin-desktop max-w-container-max mx-auto">
+        <div className="text-center mb-16">
+          <span className="text-secondary font-bold uppercase tracking-widest text-label-sm mb-4 block">Guest Stories</span>
+          <h2 className="font-headline-lg text-[40px] font-bold text-primary">Words From Our Travelers</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {testimonials && testimonials.length > 0 ? testimonials.map((testimonial: any) => (
+            <div key={testimonial.id} className="bg-surface-container-low p-8 rounded-2xl luxury-shadow border border-surface-container-highest">
+              <span className="material-symbols-outlined text-secondary-container text-4xl mb-4">format_quote</span>
+              <p className="text-on-surface-variant text-body-lg italic mb-6 leading-relaxed">
+                "{testimonial.review_content}"
+              </p>
+              <div className="pt-4 border-t border-surface-variant">
+                <h4 className="font-bold text-primary">{testimonial.guest_name}</h4>
+                <span className="text-on-tertiary-container text-sm">Traveled to {testimonial.destination}</span>
               </div>
-            )) : (
-              <div style={{ textAlign: 'center', gridColumn: '1 / -1', color: '#888' }}>
-                <p>New guest stories arriving soon.</p>
-              </div>
-            )}
+            </div>
+          )) : null}
+        </div>
+      </section>
+
+      {/* Newsletter / CTA */}
+      <section className="px-margin-desktop max-w-container-max mx-auto mb-24">
+        <div className="bg-surface-container rounded-3xl p-12 md:p-20 relative overflow-hidden flex flex-col md:flex-row items-center gap-12">
+          <div className="z-10 flex-1 text-center md:text-left">
+            <span className="text-secondary font-bold uppercase tracking-widest text-label-sm mb-4 block">Newsletter</span>
+            <h2 className="font-headline-lg text-[40px] font-bold text-primary mb-6">Receive Curated Travel Inspiration</h2>
+            <p className="text-on-surface-variant text-body-lg max-w-md mx-auto md:mx-0">Join 50,000+ luxury travelers who receive our monthly hand-picked destination guides.</p>
           </div>
+          <div className="z-10 w-full md:w-auto">
+            <div className="flex flex-col sm:flex-row gap-4 p-2 bg-white rounded-xl luxury-shadow">
+              <input className="flex-1 border-none outline-none focus:ring-0 text-primary font-medium px-4 min-w-[250px]" placeholder="Your email address" type="email" />
+              <button className="bg-primary text-on-primary px-8 py-4 rounded-lg font-bold whitespace-nowrap hover:bg-opacity-90 transition-all">Subscribe Now</button>
+            </div>
+          </div>
+          <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-secondary-container/20 rounded-full blur-3xl"></div>
         </div>
       </section>
     </main>
