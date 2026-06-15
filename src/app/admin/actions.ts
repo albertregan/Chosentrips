@@ -6,7 +6,7 @@ export async function loginAdmin(password: string) {
   const adminPassword = process.env.ADMIN_PASSWORD;
 
   if (!adminPassword) {
-    throw new Error('Admin password not configured on server.');
+    return { success: false, message: 'Admin password not configured on Vercel. Please add ADMIN_PASSWORD to your Environment Variables and redeploy.' };
   }
 
   if (password === adminPassword) {
