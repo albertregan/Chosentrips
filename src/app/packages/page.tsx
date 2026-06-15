@@ -16,13 +16,14 @@ const DESTINATIONS = [
 export default async function PackagesPage({
   searchParams,
 }: {
-  searchParams: { dest?: string }
+  searchParams: Promise<{ dest?: string }>
 }) {
+  const params = await searchParams;
   let query = supabase.from('packages').select('*').order('created_at', { ascending: false });
   
-  if (searchParams.dest) {
+  if (params.dest) {
     // Basic text search to filter by destination if it's in the title
-    query = query.ilike('title', `%${searchParams.dest}%`);
+    query = query.ilike('title', `%${params.dest}%`);
   }
 
   const { data: packages } = await query;
@@ -40,14 +41,14 @@ export default async function PackagesPage({
         <div className="mb-16">
           <h2 className="font-headline-md text-[24px] font-bold text-primary mb-6">Explore by Destination</h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <Link href="/packages" className={`relative rounded-xl overflow-hidden aspect-square luxury-shadow group ${!searchParams.dest ? 'ring-4 ring-secondary-container' : ''}`}>
+            <Link href="/packages" className={`relative rounded-xl overflow-hidden aspect-square luxury-shadow group ${!params.dest ? 'ring-4 ring-secondary-container' : ''}`}>
               <div className="absolute inset-0 bg-primary/60 group-hover:bg-primary/40 transition-all z-10"></div>
               <div className="absolute inset-0 z-20 flex items-center justify-center">
                 <span className="text-white font-bold text-lg tracking-wider uppercase">All</span>
               </div>
             </Link>
             {DESTINATIONS.map(dest => (
-              <Link key={dest.name} href={`/packages?dest=${dest.name}`} className={`relative rounded-xl overflow-hidden aspect-square luxury-shadow group ${searchParams.dest === dest.name ? 'ring-4 ring-secondary-container' : ''}`}>
+              <Link key={dest.name} href={`/packages?dest=${dest.name}`} className={`relative rounded-xl overflow-hidden aspect-square luxury-shadow group ${params.dest === dest.name ? 'ring-4 ring-secondary-container' : ''}`}>
                 <img src={dest.image} alt={dest.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent z-10"></div>
                 <div className="absolute inset-0 z-20 flex items-end justify-center pb-6">
@@ -61,7 +62,7 @@ export default async function PackagesPage({
         {/* Packages Grid */}
         <div>
           <h2 className="font-headline-md text-[24px] font-bold text-primary mb-6">
-            {searchParams.dest ? `Packages for ${searchParams.dest}` : 'All Curated Packages'}
+            {params.dest ? `Packages for ${params.dest}` : 'All Curated Packages'}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
