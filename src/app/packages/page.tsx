@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
+import PlanMyTripButton from '@/components/PlanMyTripButton';
 
 export const revalidate = 0; 
 
@@ -87,9 +88,9 @@ export default async function PackagesPage({
                   </div>
 
                   {/* Prefilled Plan My Trip button */}
-                  <Link href={`/contact-us?packageId=${pkg.id}&packageName=${encodeURIComponent(pkg.title)}`} className="block w-full text-center bg-primary text-on-primary py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all">
+                  <PlanMyTripButton packageId={pkg.id} packageName={pkg.title} className="block w-full text-center bg-primary text-on-primary py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all">
                     Plan This Trip
-                  </Link>
+                  </PlanMyTripButton>
                 </div>
               </div>
             )) : (

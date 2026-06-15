@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import PlanMyTripButton from '@/components/PlanMyTripButton';
 
 export const revalidate = 0; 
 
@@ -45,9 +46,9 @@ export default async function PackageDetailsPage({ params }: { params: { slug: s
             <h2 className="font-headline-lg text-[40px] font-bold text-primary">The Journey</h2>
             <p className="text-on-surface-variant max-w-3xl mt-4 text-lg leading-relaxed">{pkg.description}</p>
           </div>
-          <Link href={`/contact-us?packageId=${pkg.id}&packageName=${encodeURIComponent(pkg.title)}`} className="bg-primary text-on-primary px-8 py-4 rounded-lg font-bold hover:scale-[1.02] transition-transform luxury-shadow whitespace-nowrap">
+          <PlanMyTripButton packageId={pkg.id} packageName={pkg.title} className="bg-primary text-on-primary px-8 py-4 rounded-lg font-bold hover:scale-[1.02] transition-transform luxury-shadow whitespace-nowrap">
             Plan This Trip
-          </Link>
+          </PlanMyTripButton>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
