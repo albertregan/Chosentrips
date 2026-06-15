@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { ModalProvider } from '@/components/ModalProvider';
 import PlanMyTripButton from '@/components/PlanMyTripButton';
 
+import TopNav from '@/components/TopNav';
+
 export const metadata: Metadata = {
   title: 'Chosen Trips | Aspirational Luxury Travel',
   description: 'Curating the world\'s most extraordinary travel experiences for the discerning explorer.',
@@ -22,22 +24,7 @@ export default function RootLayout({
       </head>
       <body className="bg-surface text-on-surface font-body-md overflow-x-hidden">
         <ModalProvider>
-        {/* TopNavBar */}
-        <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-20 flex items-center bg-surface shadow-[0_16px_24px_rgba(0,31,63,0.12)]">
-          <div className="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-20">
-            <Link href="/" className="flex items-center">
-              <img alt="Chosen Trips" className="h-14 w-auto object-contain" src="/logo.png" />
-            </Link>
-            <nav className="hidden md:flex items-center gap-8">
-              <Link className="font-body-md text-body-md text-primary font-bold hover:border-b-2 hover:border-secondary-container transition-all duration-200" href="/packages">Destinations</Link>
-              <Link className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-primary transition-colors duration-200" href="/about-us">About Us</Link>
-              <Link className="font-body-md text-body-md text-on-surface-variant font-medium hover:text-primary transition-colors duration-200" href="/contact-us">Contact</Link>
-            </nav>
-            <PlanMyTripButton className="bg-primary text-on-primary px-8 py-3 rounded-lg font-bold text-body-md hover:scale-[1.02] active:scale-[0.98] transition-all luxury-shadow">
-              Plan My Trip
-            </PlanMyTripButton>
-          </div>
-        </header>
+        <TopNav />
 
         {children}
 

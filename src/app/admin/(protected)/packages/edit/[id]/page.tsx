@@ -2,6 +2,8 @@ import PackageForm from '@/components/admin/PackageForm';
 import { supabase } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import ItineraryManager from '@/components/admin/ItineraryManager';
+import HotelManager from '@/components/admin/HotelManager';
 
 export const revalidate = 0;
 
@@ -26,6 +28,11 @@ export default async function EditPackagePage({ params }: { params: Promise<{ id
       </div>
 
       <PackageForm initialData={pkg} />
+      
+      <div className="mt-12 space-y-12 max-w-4xl mx-auto">
+        <ItineraryManager packageId={pkg.id} />
+        <HotelManager packageId={pkg.id} />
+      </div>
     </div>
   );
 }

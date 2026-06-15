@@ -26,7 +26,9 @@ export default async function AdminLayout({
             <Link href="/admin/dashboard" className="px-6 py-3 text-on-primary-container hover:bg-primary-container hover:text-white transition-colors text-sm font-bold uppercase tracking-widest">Dashboard</Link>
             <Link href="/admin/leads" className="px-6 py-3 text-on-primary-container hover:bg-primary-container hover:text-white transition-colors text-sm font-bold uppercase tracking-widest">Leads CRM</Link>
             <Link href="/admin/destinations" className="px-6 py-3 text-on-primary-container hover:bg-primary-container hover:text-white transition-colors text-sm font-bold uppercase tracking-widest">Destinations CMS</Link>
-            <Link href="/admin/packages" className="px-6 py-3 text-secondary hover:bg-primary-container transition-colors text-sm font-bold uppercase tracking-widest border-r-4 border-secondary">Packages CMS</Link>
+            <Link href="/admin/packages" className="px-6 py-3 text-on-primary-container hover:bg-primary-container hover:text-white transition-colors text-sm font-bold uppercase tracking-widest">Packages CMS</Link>
+            <Link href="/admin/blogs" className="px-6 py-3 text-on-primary-container hover:bg-primary-container hover:text-white transition-colors text-sm font-bold uppercase tracking-widest">Blog CMS</Link>
+            <Link href="/admin/faqs" className="px-6 py-3 text-on-primary-container hover:bg-primary-container hover:text-white transition-colors text-sm font-bold uppercase tracking-widest">FAQ CMS</Link>
             <Link href="/admin/pages" className="px-6 py-3 text-on-primary-container hover:bg-primary-container hover:text-white transition-colors text-sm font-bold uppercase tracking-widest">Pages CMS</Link>
             <Link href="/admin/testimonials" className="px-6 py-3 text-on-primary-container hover:bg-primary-container hover:text-white transition-colors text-sm font-bold uppercase tracking-widest">Testimonials</Link>
           </nav>

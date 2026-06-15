@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import PlanMyTripButton from '@/components/PlanMyTripButton';
+import HotelListWithFilter from '@/components/HotelListWithFilter';
 
 export const revalidate = 0; 
 
@@ -99,24 +100,7 @@ export default async function PackageDetailsPage({ params }: { params: Promise<{
         </div>
 
         {/* Accommodations */}
-        {hotels && hotels.length > 0 && (
-          <div>
-            <h2 className="font-headline-lg text-[40px] font-bold text-primary mb-10">Accommodations</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {hotels.map((hotel: any) => (
-                <div key={hotel.id} className="bg-white p-6 rounded-xl luxury-shadow border border-surface-variant flex flex-col">
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-headline-md text-xl font-bold text-primary">{hotel.name}</h3>
-                    <div className="flex text-secondary text-sm">
-                      {'★'.repeat(hotel.star_rating)}{'☆'.repeat(5 - hotel.star_rating)}
-                    </div>
-                  </div>
-                  <p className="text-on-surface-variant text-sm flex-grow">{hotel.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        <HotelListWithFilter hotels={hotels || []} />
         
       </section>
     </main>
