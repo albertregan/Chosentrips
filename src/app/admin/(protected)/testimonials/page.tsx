@@ -35,58 +35,80 @@ export default async function AdminTestimonialsPage() {
   }
 
   return (
-    <div className="admin-card">
-      <div className="admin-header">
-        <h1>Testimonials Manager</h1>
+    <div className="p-8">
+      <div className="mb-8 border-b border-surface-variant pb-6">
+        <h1 className="font-headline-lg text-3xl font-bold text-primary">Testimonials Manager</h1>
+        <p className="text-on-surface-variant mt-2 text-sm">Manage guest reviews displayed on the website.</p>
       </div>
 
-      <div style={{ marginBottom: '40px', padding: '20px', background: 'var(--bg-offset)', border: '1px solid var(--border-color)' }}>
-        <h3 style={{ marginBottom: '20px' }}>Add New Testimonial</h3>
-        <form action={addTestimonial} style={{ display: 'grid', gap: '20px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-            <input required name="guest_name" type="text" placeholder="Guest Name" style={{ padding: '10px', width: '100%' }} />
-            <input required name="destination" type="text" placeholder="Destination Traveled To" style={{ padding: '10px', width: '100%' }} />
+      <div className="bg-white p-8 rounded-2xl luxury-shadow border border-surface-variant mb-12">
+        <h3 className="font-headline-sm text-xl font-bold text-primary mb-6">Add New Testimonial</h3>
+        <form action={addTestimonial} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-label-sm font-label-sm text-on-surface-variant mb-2 uppercase tracking-widest font-bold">Guest Name</label>
+              <input required name="guest_name" type="text" className="w-full border-2 border-surface-variant focus:border-secondary rounded-lg bg-surface px-4 py-3 text-primary font-medium focus:outline-none transition-colors" placeholder="e.g. John Doe" />
+            </div>
+            <div>
+              <label className="block text-label-sm font-label-sm text-on-surface-variant mb-2 uppercase tracking-widest font-bold">Destination Traveled To</label>
+              <input required name="destination" type="text" className="w-full border-2 border-surface-variant focus:border-secondary rounded-lg bg-surface px-4 py-3 text-primary font-medium focus:outline-none transition-colors" placeholder="e.g. Swiss Alps" />
+            </div>
           </div>
-          <textarea required name="review_content" rows={4} placeholder="Review Content" style={{ padding: '10px', width: '100%' }}></textarea>
-          <button type="submit" className="btn btn-primary" style={{ justifySelf: 'start', padding: '10px 30px' }}>Add Testimonial</button>
+          <div>
+            <label className="block text-label-sm font-label-sm text-on-surface-variant mb-2 uppercase tracking-widest font-bold">Review Content</label>
+            <textarea required name="review_content" rows={4} className="w-full border-2 border-surface-variant focus:border-secondary rounded-lg bg-surface px-4 py-3 text-primary font-medium focus:outline-none transition-colors" placeholder="Their experience..."></textarea>
+          </div>
+          <button type="submit" className="bg-primary text-on-primary px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all luxury-shadow">Add Testimonial</button>
         </form>
       </div>
 
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>Guest</th>
-            <th>Destination</th>
-            <th>Review</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {testimonials?.map((t: any) => (
-            <tr key={t.id}>
-              <td>{t.guest_name}</td>
-              <td>{t.destination}</td>
-              <td><div style={{ maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t.review_content}</div></td>
-              <td>
-                <form action={togglePublish}>
-                  <input type="hidden" name="id" value={t.id} />
-                  <input type="hidden" name="is_published" value={t.is_published} />
-                  <button type="submit" style={{ cursor: 'pointer', background: 'none', border: 'none', color: t.is_published ? 'green' : 'red', fontWeight: 'bold' }}>
-                    {t.is_published ? 'Published' : 'Hidden'}
-                  </button>
-                </form>
-              </td>
-              <td>
-                <form action={deleteTestimonial}>
-                  <input type="hidden" name="id" value={t.id} />
-                  <button type="submit" style={{ cursor: 'pointer', background: 'none', border: 'none', color: 'red' }}>Delete</button>
-                </form>
-              </td>
+      <div className="bg-white rounded-2xl luxury-shadow border border-surface-variant overflow-hidden">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-surface-container-low text-on-surface-variant text-sm tracking-widest uppercase border-b border-surface-variant">
+              <th className="p-5 font-bold">Guest</th>
+              <th className="p-5 font-bold">Destination</th>
+              <th className="p-5 font-bold">Review</th>
+              <th className="p-5 font-bold">Status</th>
+              <th className="p-5 font-bold text-right">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {testimonials && testimonials.length > 0 ? (
+              testimonials.map((t: any) => (
+                <tr key={t.id} className="border-b border-surface-container hover:bg-surface-container-low transition-colors group">
+                  <td className="p-5 font-bold text-primary">{t.guest_name}</td>
+                  <td className="p-5 text-on-surface-variant">{t.destination}</td>
+                  <td className="p-5">
+                    <div className="max-w-[300px] truncate text-on-surface-variant text-sm">{t.review_content}</div>
+                  </td>
+                  <td className="p-5">
+                    <form action={togglePublish}>
+                      <input type="hidden" name="id" value={t.id} />
+                      <input type="hidden" name="is_published" value={t.is_published} />
+                      <button type="submit" className={`px-3 py-1 rounded-full text-xs uppercase tracking-widest font-bold border ${t.is_published ? 'bg-secondary-container/20 text-secondary-fixed border-secondary-container/50' : 'bg-surface-variant text-on-surface-variant border-outline'}`}>
+                        {t.is_published ? 'Published' : 'Hidden'}
+                      </button>
+                    </form>
+                  </td>
+                  <td className="p-5 text-right">
+                    <form action={deleteTestimonial}>
+                      <input type="hidden" name="id" value={t.id} />
+                      <button type="submit" className="text-error font-bold text-sm hover:underline">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5} className="p-8 text-center text-on-surface-variant italic">
+                  No testimonials found.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

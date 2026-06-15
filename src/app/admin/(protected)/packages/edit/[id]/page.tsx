@@ -5,8 +5,9 @@ import Link from 'next/link';
 
 export const revalidate = 0;
 
-export default async function EditPackagePage({ params }: { params: { id: string } }) {
-  const { data: pkg } = await supabase.from('packages').select('*').eq('id', params.id).single();
+export default async function EditPackagePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const { data: pkg } = await supabase.from('packages').select('*').eq('id', id).single();
 
   if (!pkg) {
     notFound();
