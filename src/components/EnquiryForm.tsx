@@ -35,7 +35,7 @@ export default function EnquiryForm({ packageId, packageName }: { packageId?: st
   };
 
   return (
-    <div className="admin-card" style={{ sticky: 'top', top: '20px' }}>
+    <div className="admin-card" style={{ position: 'sticky', top: '20px' }}>
       <h3 style={{ marginBottom: '20px' }}>
         {packageName ? `Enquire about ${packageName}` : 'Get a Custom Quote'}
       </h3>
