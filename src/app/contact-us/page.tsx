@@ -1,59 +1,75 @@
 import EnquiryForm from '@/components/EnquiryForm';
 
+export const revalidate = 0;
+
 export default function ContactUsPage() {
   return (
-    <main>
-      <div style={{ backgroundColor: 'var(--primary-color)', padding: '60px 0', color: 'white', textAlign: 'center' }}>
-        <h1 style={{ color: 'white', marginBottom: '10px' }}>Contact Us</h1>
-        <p style={{ opacity: 0.9, maxWidth: '600px', margin: '0 auto' }}>We are here to help you plan your perfect getaway.</p>
-      </div>
+    <main style={{ backgroundColor: 'var(--bg-main)' }}>
+      {/* Cinematic Hero */}
+      <section style={{
+        position: 'relative',
+        height: '60vh',
+        minHeight: '400px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'url("https://images.unsplash.com/photo-1542314831-c6a4d1421008?auto=format&fit=crop&w=2560&q=80") center/cover no-repeat',
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0, bottom: 0,
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7))',
+          zIndex: 1
+        }}></div>
+        
+        <div className="container" style={{ position: 'relative', zIndex: 2, textAlign: 'center', color: 'white', marginTop: '100px' }}>
+          <h1 style={{ fontSize: '4.5rem', marginBottom: '20px', textShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>Plan Your Trip</h1>
+          <p style={{ fontSize: '1.2rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic', opacity: 0.9 }}>
+            Let us curate your next masterpiece.
+          </p>
+        </div>
+      </section>
 
-      <div className="container py-section">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'start' }}>
-          <div>
-            <h2 style={{ marginBottom: '20px' }}>Get in Touch</h2>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '30px', fontSize: '1.1rem' }}>
-              Have questions about our packages or want a custom itinerary? Fill out the form, and our travel experts will reach out to you within 24 hours.
-            </p>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div className="admin-card" style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: 0 }}>
-                <div style={{ backgroundColor: 'var(--accent-color)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'var(--primary-color)', fontWeight: 'bold' }}>
-                  📞
-                </div>
-                <div>
-                  <h4 style={{ margin: 0 }}>Phone</h4>
-                  <p style={{ color: 'var(--text-muted)', margin: 0 }}>+91 98765 43210</p>
-                </div>
-              </div>
-
-              <div className="admin-card" style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: 0 }}>
-                <div style={{ backgroundColor: 'var(--accent-color)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'var(--primary-color)', fontWeight: 'bold' }}>
-                  ✉️
-                </div>
-                <div>
-                  <h4 style={{ margin: 0 }}>Email</h4>
-                  <p style={{ color: 'var(--text-muted)', margin: 0 }}>hello@chosentrips.com</p>
-                </div>
-              </div>
-
-              <div className="admin-card" style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: 0 }}>
-                <div style={{ backgroundColor: 'var(--accent-color)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'var(--primary-color)', fontWeight: 'bold' }}>
-                  📍
-                </div>
-                <div>
-                  <h4 style={{ margin: 0 }}>Office</h4>
-                  <p style={{ color: 'var(--text-muted)', margin: 0 }}>123 Travel Lane, Business Hub, City 400001</p>
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* Content Section */}
+      <section className="container" style={{ padding: '100px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px' }}>
+        
+        {/* Left Col: Info */}
+        <div style={{ paddingRight: '40px' }}>
+          <span style={{ color: 'var(--secondary-color)', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.8rem', display: 'block', marginBottom: '20px' }}>Get in Touch</span>
+          <h2 style={{ fontSize: '3rem', marginBottom: '40px', lineHeight: 1.2 }}>Begin the extraordinary.</h2>
           
+          <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '60px', lineHeight: 2 }}>
+            Whether you have a specific destination in mind or you are seeking inspiration, our team of expert travel curators is at your disposal. Fill out the comprehensive planner, and we will begin designing an itinerary tailored exclusively to you.
+          </p>
+
+          <div style={{ marginBottom: '40px' }}>
+            <h4 style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Email Us</h4>
+            <a href="mailto:concierge@chosentrips.com" style={{ fontSize: '1.2rem', color: 'var(--text-dark)', borderBottom: '1px solid var(--border-color)', paddingBottom: '5px' }}>concierge@chosentrips.com</a>
+          </div>
+
+          <div style={{ marginBottom: '40px' }}>
+            <h4 style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Call Us</h4>
+            <p style={{ fontSize: '1.2rem', color: 'var(--text-dark)' }}>+1 (800) 123-CHOSEN</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Available 24/7 for our elite members.</p>
+          </div>
+
           <div>
+            <h4 style={{ fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px' }}>Global Headquarters</h4>
+            <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', lineHeight: 1.8 }}>
+              150 Luxury Avenue, Suite 400<br />
+              New York, NY 10019
+            </p>
+          </div>
+        </div>
+
+        {/* Right Col: Enquiry Form */}
+        <div>
+          <div style={{ marginTop: '-200px', position: 'relative', zIndex: 10 }}>
             <EnquiryForm />
           </div>
         </div>
-      </div>
+        
+      </section>
     </main>
   );
 }

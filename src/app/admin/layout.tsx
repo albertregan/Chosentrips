@@ -17,7 +17,8 @@ export default function AdminLayout({
           <Link href="/admin/leads" className="admin-nav-link">Leads CRM</Link>
           <Link href="/admin/packages" className="admin-nav-link">Packages CMS</Link>
           <Link href="/admin/pages" className="admin-nav-link">Pages CMS</Link>
-          <Link href="/" className="admin-nav-link" style={{marginTop: 'auto'}}>Back to Site</Link>
+          <Link href="/admin/testimonials" className="admin-nav-link">Testimonials CMS</Link>
+          <Link href="/" className="admin-nav-link" style={{ marginTop: 'auto', borderTop: '1px solid #333', paddingTop: '20px' }}>Back to Website</Link>
         </nav>
       </aside>
       <main className="admin-main">
