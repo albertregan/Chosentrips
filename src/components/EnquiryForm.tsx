@@ -21,7 +21,10 @@ export default function EnquiryForm({ packageId, packageName, isModal, onSuccess
     message: '',
     name: '',
     email: '',
-    phone_number: ''
+    phone_number: '',
+    referral_name: '',
+    plan_summary: '',
+    customer_type: 'Family'
   });
 
   const handleChildrenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +67,10 @@ export default function EnquiryForm({ packageId, packageName, isModal, onSuccess
       no_of_children: formData.no_of_children,
       children_ages: formData.children_ages,
       budget: parseFloat(formData.budget as string) || null,
-      budget_type: formData.budget_type
+      budget_type: formData.budget_type,
+      referral_name: formData.referral_name || null,
+      plan_summary: formData.plan_summary || null,
+      customer_type: formData.customer_type
     };
 
     const { error: submitError } = await supabase.from('leads').insert([submissionData]);
@@ -142,6 +148,17 @@ export default function EnquiryForm({ packageId, packageName, isModal, onSuccess
               </div>
             </div>
 
+            <div>
+              <label className={labelClasses}>Customer Type</label>
+              <select className={`${inputClasses} bg-white rounded-lg border border-surface-variant`} value={formData.customer_type} onChange={(e) => setFormData({...formData, customer_type: e.target.value})}>
+                <option value="Family">Family</option>
+                <option value="Honeymooners">Honeymooners</option>
+                <option value="Friends">Friends</option>
+                <option value="Children friendly">Children friendly</option>
+                <option value="Solo Travelers">Solo Travelers</option>
+              </select>
+            </div>
+
             {formData.no_of_children > 0 && (
               <div className="p-6 bg-surface-container rounded-xl mt-6">
                 <label className="block text-primary font-bold mb-4">Ages of Children at time of travel</label>
@@ -176,7 +193,12 @@ export default function EnquiryForm({ packageId, packageName, isModal, onSuccess
 
             <div>
               <label className={labelClasses}>Specific Requirements / Occasion</label>
-              <textarea rows={4} className={`${inputClasses} resize-none`} value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} placeholder="Honeymoon, dietary requirements, specific hotels..."></textarea>
+              <textarea rows={3} className={`${inputClasses} resize-none`} value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} placeholder="Honeymoon, dietary requirements, specific hotels..."></textarea>
+            </div>
+
+            <div>
+              <label className={labelClasses}>Plan Summary</label>
+              <textarea rows={3} className={`${inputClasses} resize-none`} value={formData.plan_summary} onChange={(e) => setFormData({...formData, plan_summary: e.target.value})} placeholder="Briefly summarize your ideal trip plan..."></textarea>
             </div>
           </div>
         )}
@@ -195,6 +217,10 @@ export default function EnquiryForm({ packageId, packageName, isModal, onSuccess
             <div>
               <label className={labelClasses}>Phone Number</label>
               <input required type="tel" className={inputClasses} value={formData.phone_number} onChange={(e) => setFormData({...formData, phone_number: e.target.value})} />
+            </div>
+            <div>
+              <label className={labelClasses}>Referral Name / Source (Optional)</label>
+              <input type="text" className={inputClasses} value={formData.referral_name} onChange={(e) => setFormData({...formData, referral_name: e.target.value})} placeholder="How did you hear about us?" />
             </div>
           </div>
         )}

@@ -16,6 +16,9 @@ type PackageInitialData = {
   inclusions?: string | null;
   exclusions?: string | null;
   is_featured?: boolean | null;
+  category?: string | null;
+  departure_city?: string | null;
+  is_weekend_destination?: boolean | null;
 };
 
 type DestinationOption = {
@@ -40,6 +43,9 @@ export default function PackageForm({ initialData }: { initialData?: PackageInit
     inclusions: initialData?.inclusions || '',
     exclusions: initialData?.exclusions || '',
     is_featured: initialData?.is_featured || false,
+    category: initialData?.category || 'Beach',
+    departure_city: initialData?.departure_city || '',
+    is_weekend_destination: initialData?.is_weekend_destination || false,
   });
 
   const generateSlug = (title: string) => {
@@ -148,6 +154,17 @@ export default function PackageForm({ initialData }: { initialData?: PackageInit
           <label className={labelClasses}>Starting Price (₹)</label>
           <input required type="number" min="0" className={inputClasses} value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} placeholder="e.g. 50000" />
         </div>
+        <div>
+          <label className={labelClasses}>Category</label>
+          <select required className={inputClasses} value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})}>
+            <option value="Beach">Beach</option>
+            <option value="Mountains">Mountains</option>
+            <option value="History">History</option>
+            <option value="Nightlife">Nightlife</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Pilgrimage">Pilgrimage</option>
+          </select>
+        </div>
       </div>
 
       <div>
@@ -171,6 +188,27 @@ export default function PackageForm({ initialData }: { initialData?: PackageInit
         <label htmlFor="is_featured" className="font-bold text-primary cursor-pointer">
           Featured Package (Show on Homepage)
         </label>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-8 bg-surface-container-low p-6 rounded-lg border border-surface-variant">
+        <div className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            id="is_weekend_destination"
+            className="w-5 h-5 accent-primary"
+            checked={formData.is_weekend_destination}
+            onChange={(e) => setFormData({...formData, is_weekend_destination: e.target.checked})}
+          />
+          <label htmlFor="is_weekend_destination" className="font-bold text-primary cursor-pointer">
+            Weekend Destination
+          </label>
+        </div>
+        {formData.is_weekend_destination && (
+          <div className="flex-1">
+            <label className={labelClasses}>Departure City</label>
+            <input type="text" className={inputClasses} value={formData.departure_city} onChange={(e) => setFormData({...formData, departure_city: e.target.value})} placeholder="e.g. Bangalore" />
+          </div>
+        )}
       </div>
 
       <div>

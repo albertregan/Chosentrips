@@ -39,6 +39,7 @@ export default function TopNav() {
           <Link className={`font-body-md text-body-md font-bold transition-all duration-200 hover:border-b-2 ${scrolled ? 'text-primary hover:border-secondary-container' : 'text-white hover:border-white'}`} href="/packages">Destinations</Link>
           <Link className={`font-body-md text-body-md font-medium transition-colors duration-200 ${scrolled ? 'text-on-surface-variant hover:text-primary' : 'text-white/90 hover:text-white'}`} href="/about-us">About Us</Link>
           <Link className={`font-body-md text-body-md font-medium transition-colors duration-200 ${scrolled ? 'text-on-surface-variant hover:text-primary' : 'text-white/90 hover:text-white'}`} href="/blog">Blog</Link>
+          <Link className={`font-body-md text-body-md font-medium transition-colors duration-200 ${scrolled ? 'text-on-surface-variant hover:text-primary' : 'text-white/90 hover:text-white'}`} href="/reviews">Reviews</Link>
           <Link className={`font-body-md text-body-md font-medium transition-colors duration-200 ${scrolled ? 'text-on-surface-variant hover:text-primary' : 'text-white/90 hover:text-white'}`} href="/faq">FAQ</Link>
           <Link className={`font-body-md text-body-md font-medium transition-colors duration-200 ${scrolled ? 'text-on-surface-variant hover:text-primary' : 'text-white/90 hover:text-white'}`} href="/contact-us">Contact</Link>
         </nav>

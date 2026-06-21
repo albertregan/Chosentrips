@@ -28,8 +28,9 @@ export default async function AdminTestimonialsPage() {
     const guest_name = formData.get('guest_name') as string;
     const destination = formData.get('destination') as string;
     const review_content = formData.get('review_content') as string;
+    const rating = parseInt(formData.get('rating') as string) || 5;
     
-    await supabase.from('testimonials').insert([{ guest_name, destination, review_content, is_published: true }]);
+    await supabase.from('testimonials').insert([{ guest_name, destination, review_content, rating, is_published: true }]);
     revalidatePath('/admin/testimonials');
     revalidatePath('/');
   }
@@ -58,6 +59,10 @@ export default async function AdminTestimonialsPage() {
             <label className="block text-label-sm font-label-sm text-on-surface-variant mb-2 uppercase tracking-widest font-bold">Review Content</label>
             <textarea required name="review_content" rows={4} className="w-full border-2 border-surface-variant focus:border-secondary rounded-lg bg-surface px-4 py-3 text-primary font-medium focus:outline-none transition-colors" placeholder="Their experience..."></textarea>
           </div>
+          <div>
+            <label className="block text-label-sm font-label-sm text-on-surface-variant mb-2 uppercase tracking-widest font-bold">Rating (1-5)</label>
+            <input required name="rating" type="number" min="1" max="5" defaultValue="5" className="w-full md:w-1/4 border-2 border-surface-variant focus:border-secondary rounded-lg bg-surface px-4 py-3 text-primary font-medium focus:outline-none transition-colors" />
+          </div>
           <button type="submit" className="bg-primary text-on-primary px-8 py-3 rounded-lg font-bold hover:bg-opacity-90 transition-all luxury-shadow">Add Testimonial</button>
         </form>
       </div>
@@ -80,6 +85,9 @@ export default async function AdminTestimonialsPage() {
                   <td className="p-5 font-bold text-primary">{t.guest_name}</td>
                   <td className="p-5 text-on-surface-variant">{t.destination}</td>
                   <td className="p-5">
+                    <div className="text-secondary mb-1">
+                      {'★'.repeat(t.rating || 5)}{'☆'.repeat(5 - (t.rating || 5))}
+                    </div>
                     <div className="max-w-[300px] truncate text-on-surface-variant text-sm">{t.review_content}</div>
                   </td>
                   <td className="p-5">

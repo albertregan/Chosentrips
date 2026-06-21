@@ -6,6 +6,7 @@ import PlanMyTripButton from '@/components/PlanMyTripButton';
 
 import TopNav from '@/components/TopNav';
 import Footer from '@/components/Footer';
+import WhatsAppButton from '@/components/WhatsAppButton';
 
 export const metadata: Metadata = {
   title: 'Chosen Trips | Aspirational Luxury Travel',
@@ -28,6 +29,8 @@ export default function RootLayout({
         <TopNav />
 
         {children}
+
+        <WhatsAppButton />
 
         <Footer />
         </ModalProvider>

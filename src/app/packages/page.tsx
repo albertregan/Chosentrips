@@ -1,13 +1,14 @@
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import PlanMyTripButton from '@/components/PlanMyTripButton';
+import PackageFilters from '@/components/PackageFilters';
 
 export const revalidate = 0; 
 
 export default async function PackagesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ dest?: string }>
+  searchParams: Promise<{ dest?: string; category?: string; departure_city?: string }>
 }) {
   const params = await searchParams;
   
@@ -20,6 +21,14 @@ export default async function PackagesPage({
   if (params.dest) {
     // Filter by the foreign key relation's slug
     query = query.eq('destinations.slug', params.dest);
+  }
+  
+  if (params.category) {
+    query = query.eq('category', params.category);
+  }
+  
+  if (params.departure_city) {
+    query = query.eq('departure_city', params.departure_city);
   }
 
   const { data: packages, error } = await query;
@@ -60,9 +69,13 @@ export default async function PackagesPage({
 
         {/* Packages Grid */}
         <div>
-          <h2 className="font-headline-md text-[24px] font-bold text-primary mb-6">
-            {currentDestName ? `Packages for ${currentDestName}` : 'All Curated Packages'}
-          </h2>
+          <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+            <h2 className="font-headline-md text-[24px] font-bold text-primary mb-4 md:mb-0">
+              {currentDestName ? `Packages for ${currentDestName}` : 'All Curated Packages'}
+            </h2>
+          </div>
+          
+          <PackageFilters />
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {packages && packages.length > 0 ? packages.map((pkg: any) => (

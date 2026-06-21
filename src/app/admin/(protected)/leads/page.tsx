@@ -22,7 +22,8 @@ export default async function LeadsPage() {
               <th className="p-5 font-bold">Date</th>
               <th className="p-5 font-bold">Contact Info</th>
               <th className="p-5 font-bold">Package / Destination</th>
-              <th className="p-5 font-bold">Budget & Pax</th>
+              <th className="p-5 font-bold">Details & Budget</th>
+              <th className="p-5 font-bold">Customer Info</th>
               <th className="p-5 font-bold">Status</th>
             </tr>
           </thead>
@@ -47,9 +48,14 @@ export default async function LeadsPage() {
                     <div className="text-sm text-primary font-bold mb-1">
                       {lead.budget ? `₹${lead.budget.toLocaleString()} (${lead.budget_type})` : 'Budget not specified'}
                     </div>
-                    <div className="text-xs text-on-surface-variant">
+                    <div className="text-xs text-on-surface-variant mb-1">
                       {lead.no_of_adults} Adults {lead.no_of_children > 0 && `, ${lead.no_of_children} Children`} {lead.no_of_nights && `| ${lead.no_of_nights} Nights`}
                     </div>
+                    {lead.plan_summary && <div className="text-xs text-on-surface-variant italic mt-2 border-t pt-1 border-surface-container">"{lead.plan_summary}"</div>}
+                  </td>
+                  <td className="p-5">
+                    <div className="text-sm font-bold mb-1">{lead.customer_type || 'Family'}</div>
+                    {lead.referral_name && <div className="text-xs text-on-surface-variant">Ref: {lead.referral_name}</div>}
                   </td>
                   <td className="p-5">
                     <span className={`px-3 py-1 rounded-full text-xs uppercase tracking-widest font-bold border ${lead.status === 'new' ? 'bg-secondary-container/20 text-secondary-fixed border-secondary-container/50' : 'bg-surface-variant text-on-surface-variant border-outline'}`}>

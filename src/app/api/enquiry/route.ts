@@ -11,7 +11,10 @@ export async function POST(request: Request) {
       phone: data.phone,
       message: data.message,
       package_id: data.package_id || null,
-      status: 'new'
+      status: 'new',
+      referral_name: data.referral_name || null,
+      plan_summary: data.plan_summary || null,
+      customer_type: data.customer_type || 'Family'
     }]);
 
     if (error) {

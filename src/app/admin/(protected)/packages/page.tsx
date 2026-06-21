@@ -10,6 +10,9 @@ type AdminPackage = {
   image_url: string | null;
   is_featured: boolean | null;
   price: number | null;
+  category: string | null;
+  departure_city: string | null;
+  is_weekend_destination: boolean | null;
   destinations: {
     name: string;
   } | null;
@@ -40,8 +43,8 @@ export default async function PackagesPage() {
             <tr className="bg-surface-container-low text-on-surface-variant text-sm tracking-widest uppercase border-b border-surface-variant">
               <th className="p-5 font-bold">Image</th>
               <th className="p-5 font-bold">Title & Slug</th>
-              <th className="p-5 font-bold">Destination</th>
-              <th className="p-5 font-bold">Featured</th>
+              <th className="p-5 font-bold">Destination & Category</th>
+              <th className="p-5 font-bold">Featured / Weekend</th>
               <th className="p-5 font-bold">Price</th>
               <th className="p-5 font-bold text-right">Actions</th>
             </tr>
@@ -61,11 +64,28 @@ export default async function PackagesPage() {
                     <span className="bg-secondary-container/20 text-secondary-fixed font-bold px-3 py-1 rounded-full text-xs uppercase tracking-widest border border-secondary-container/50">
                       {pkg.destinations?.name || 'Unassigned'}
                     </span>
+                    <div className="text-xs text-on-surface-variant mt-2 font-bold uppercase tracking-widest">
+                      {pkg.category || 'N/A'}
+                    </div>
                   </td>
                   <td className="p-5">
-                    <span className={`px-3 py-1 rounded-full text-xs uppercase tracking-widest font-bold border ${pkg.is_featured ? 'bg-secondary-container/20 text-secondary-fixed border-secondary-container/50' : 'bg-surface-variant text-on-surface-variant border-outline'}`}>
-                      {pkg.is_featured ? 'Yes' : 'No'}
-                    </span>
+                    <div className="flex flex-col gap-2">
+                      <div>
+                        <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mr-2">Featured:</span>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border ${pkg.is_featured ? 'bg-secondary-container/20 text-secondary-fixed border-secondary-container/50' : 'bg-surface-variant text-on-surface-variant border-outline'}`}>
+                          {pkg.is_featured ? 'Yes' : 'No'}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mr-2">Weekend:</span>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase tracking-widest font-bold border ${pkg.is_weekend_destination ? 'bg-secondary-container/20 text-secondary-fixed border-secondary-container/50' : 'bg-surface-variant text-on-surface-variant border-outline'}`}>
+                          {pkg.is_weekend_destination ? 'Yes' : 'No'}
+                        </span>
+                      </div>
+                      {pkg.is_weekend_destination && pkg.departure_city && (
+                        <div className="text-xs text-outline italic">Ex {pkg.departure_city}</div>
+                      )}
+                    </div>
                   </td>
                   <td className="p-5 font-bold text-primary">₹{pkg.price?.toLocaleString() || 'N/A'}</td>
                   <td className="p-5 text-right">
