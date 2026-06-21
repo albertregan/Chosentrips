@@ -11,7 +11,6 @@ export default function PackageFilters() {
   const searchParams = useSearchParams();
 
   const currentCategory = searchParams?.get('category') || '';
-  const currentCity = searchParams?.get('departure_city') || '';
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -40,22 +39,6 @@ export default function PackageFilters() {
           <option value="">All Categories</option>
           {CATEGORIES.map(cat => (
             <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
-      </div>
-      
-      <div className="flex-1">
-        <label className="block text-label-sm font-label-sm text-on-surface-variant mb-2 uppercase tracking-widest font-bold">
-          Weekend Departure City
-        </label>
-        <select
-          className="w-full border-2 border-surface-variant focus:border-secondary rounded-lg bg-white px-4 py-3 text-primary font-medium focus:outline-none transition-colors"
-          value={currentCity}
-          onChange={(e) => router.push('?' + createQueryString('departure_city', e.target.value))}
-        >
-          <option value="">All Cities</option>
-          {DEPARTURE_CITIES.map(city => (
-            <option key={city} value={city}>Ex {city}</option>
           ))}
         </select>
       </div>

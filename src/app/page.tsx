@@ -6,6 +6,7 @@ export const revalidate = 0;
 export default async function Home() {
   const { data: testimonials } = await supabase.from('testimonials').select('*').eq('is_published', true).order('created_at', { ascending: false });
   const { data: featuredPackages } = await supabase.from('packages').select('*').eq('is_featured', true).limit(3).order('created_at', { ascending: false });
+  const { data: weekendPackages } = await supabase.from('packages').select('*').eq('is_weekend_destination', true).limit(3).order('created_at', { ascending: false });
 
   return (
     <main>
@@ -64,6 +65,53 @@ export default async function Home() {
               No packages available yet.
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Weekend Packages */}
+      <section className="bg-surface-container-low py-24">
+        <div className="px-margin-desktop max-w-container-max mx-auto">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <span className="text-secondary font-bold uppercase tracking-widest text-label-sm mb-4 block">Quick Escapes</span>
+              <h2 className="font-headline-lg text-[40px] font-bold text-primary mb-2">Weekend Trips</h2>
+              <p className="text-on-surface-variant max-w-xl">Short, rejuvenating getaways carefully designed for the perfect weekend break.</p>
+            </div>
+            <Link href="/packages" className="text-secondary font-bold flex items-center gap-2 group hidden md:flex">
+              Explore more
+              <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {weekendPackages && weekendPackages.length > 0 ? weekendPackages.map((pkg: any) => (
+              <div key={pkg.id} className="group luxury-shadow rounded-xl overflow-hidden bg-white transition-soft hover:-translate-y-2">
+                <div className="relative aspect-[16/9] overflow-hidden">
+                  <img alt={pkg.title} className="w-full h-full object-cover transition-soft group-hover:scale-110" src={pkg.image_url || 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=80'} />
+                  {pkg.departure_city && (
+                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-primary uppercase tracking-wider">
+                      Ex {pkg.departure_city}
+                    </div>
+                  )}
+                </div>
+                <div className="p-6">
+                  <h3 className="font-headline-md text-[24px] font-semibold text-primary mb-1">{pkg.title}</h3>
+                  <p className="text-on-surface-variant text-body-md mb-4 line-clamp-2">{pkg.description}</p>
+                  <div className="flex justify-between items-center pt-4 border-t border-surface-container">
+                    <div>
+                      <span className="text-label-sm font-label-sm text-on-surface-variant block uppercase tracking-widest text-xs">Starting at</span>
+                      <span className="font-headline-md text-secondary font-bold text-xl">₹{pkg.price?.toLocaleString() || 'N/A'}</span>
+                    </div>
+                    <Link href={`/packages/${pkg.slug}`} className="border-[1.5px] border-primary text-primary px-4 py-2 rounded-lg font-bold text-body-md hover:bg-primary hover:text-on-primary transition-all">View Package</Link>
+                  </div>
+                </div>
+              </div>
+            )) : (
+              <div className="col-span-3 text-center py-12 text-on-surface-variant italic">
+                No weekend trips available yet.
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
