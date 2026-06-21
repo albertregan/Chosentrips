@@ -5,7 +5,7 @@ export const revalidate = 0;
 
 export default async function Home() {
   const { data: testimonials } = await supabase.from('testimonials').select('*').eq('is_published', true).order('created_at', { ascending: false });
-  const { data: featuredPackages } = await supabase.from('packages').select('*').limit(3).order('created_at', { ascending: false });
+  const { data: featuredPackages } = await supabase.from('packages').select('*').eq('is_featured', true).limit(3).order('created_at', { ascending: false });
 
   return (
     <main>
