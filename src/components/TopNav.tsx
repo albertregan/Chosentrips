@@ -26,12 +26,12 @@ export default function TopNav() {
   }
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-20 flex items-center ${scrolled ? 'bg-surface shadow-[0_16px_24px_rgba(0,31,63,0.12)]' : 'bg-transparent'}`}>
-      <div className="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-20">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-24 flex items-center ${scrolled ? 'bg-surface shadow-[0_16px_24px_rgba(0,31,63,0.12)]' : 'bg-transparent'}`}>
+      <div className="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-24">
         <Link href="/" className="flex items-center">
           <img 
             alt="Chosen Trips" 
-            className={`h-16 w-auto object-contain transition-all duration-300 ${!scrolled ? 'brightness-0 invert' : ''}`} 
+            className="h-20 md:h-24 w-auto object-contain transition-all duration-300 drop-shadow-md" 
             src="/logo.png" 
           />
         </Link>
