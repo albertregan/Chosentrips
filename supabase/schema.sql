@@ -1,9 +1,21 @@
+-- Create destinations table
+CREATE TABLE destinations (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  name TEXT NOT NULL,
+  slug TEXT NOT NULL UNIQUE,
+  description TEXT,
+  image_url TEXT,
+  is_featured BOOLEAN DEFAULT false
+);
+
 -- Create packages table
 CREATE TABLE packages (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at TIMESTAMPTZ DEFAULT now(),
   title TEXT NOT NULL,
   slug TEXT NOT NULL UNIQUE,
+  destination_id UUID REFERENCES destinations(id) ON DELETE SET NULL,
   type TEXT NOT NULL CHECK (type IN ('domestic', 'international')),
   description TEXT,
   inclusions TEXT,

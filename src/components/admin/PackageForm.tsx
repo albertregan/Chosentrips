@@ -4,7 +4,26 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
-export default function PackageForm({ initialData }: { initialData?: any }) {
+type PackageInitialData = {
+  id?: string;
+  title?: string;
+  slug?: string;
+  destination_id?: string | null;
+  type?: string;
+  price?: number | string | null;
+  image_url?: string | null;
+  description?: string | null;
+  inclusions?: string | null;
+  exclusions?: string | null;
+  is_featured?: boolean | null;
+};
+
+type DestinationOption = {
+  id: string;
+  name: string;
+};
+
+export default function PackageForm({ initialData }: { initialData?: PackageInitialData }) {
   const router = useRouter();
   const isEditing = !!initialData;
   const [loading, setLoading] = useState(false);
@@ -15,18 +34,19 @@ export default function PackageForm({ initialData }: { initialData?: any }) {
     slug: initialData?.slug || '',
     destination_id: initialData?.destination_id || '',
     type: initialData?.type || 'international',
-    price: initialData?.price || '',
+    price: initialData?.price?.toString() || '',
     image_url: initialData?.image_url || '',
     description: initialData?.description || '',
     inclusions: initialData?.inclusions || '',
     exclusions: initialData?.exclusions || '',
+    is_featured: initialData?.is_featured || false,
   });
 
   const generateSlug = (title: string) => {
     return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
   };
 
-  const [destinations, setDestinations] = useState<any[]>([]);
+  const [destinations, setDestinations] = useState<DestinationOption[]>([]);
 
   useEffect(() => {
     async function fetchDestinations() {
@@ -62,8 +82,13 @@ export default function PackageForm({ initialData }: { initialData?: any }) {
       const { error } = await supabase.from('packages').update(payload).eq('id', initialData.id);
       resultError = error;
     } else {
-      const { error } = await supabase.from('packages').insert([payload]);
+      const { error, data } = await supabase.from('packages').insert([payload]).select('id').single();
       resultError = error;
+      if (!error && data?.id) {
+        router.push(`/admin/packages/edit/${data.id}`);
+        router.refresh();
+        return;
+      }
     }
 
     setLoading(false);
@@ -133,6 +158,19 @@ export default function PackageForm({ initialData }: { initialData?: any }) {
             <img src={formData.image_url} alt="Preview" className="h-32 object-cover rounded shadow-sm" />
           </div>
         )}
+      </div>
+
+      <div className="flex items-center gap-3 bg-surface-container-low p-4 rounded-lg border border-surface-variant">
+        <input
+          type="checkbox"
+          id="is_featured"
+          className="w-5 h-5 accent-primary"
+          checked={formData.is_featured}
+          onChange={(e) => setFormData({...formData, is_featured: e.target.checked})}
+        />
+        <label htmlFor="is_featured" className="font-bold text-primary cursor-pointer">
+          Featured Package (Show on Homepage)
+        </label>
       </div>
 
       <div>
