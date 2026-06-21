@@ -15,7 +15,7 @@ export default function Footer() {
       <div className="max-w-container-max mx-auto w-full flex flex-col md:flex-row justify-between">
         <div className="mb-8 md:mb-0">
           <div className="flex items-center mb-6">
-            <img alt="Chosen Trips" className="h-12 w-auto object-contain brightness-0 invert" src="/logo.png" />
+            <img alt="Chosen Trips" className="h-16 w-auto object-contain drop-shadow-md" src="/logo.png" />
           </div>
           <p className="text-on-primary-container max-w-xs mb-6">Crafting unforgettable luxury experiences for the modern explorer.</p>
           <div className="flex gap-4">
