@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { createRecord, updateRecord } from '@/app/admin/cms-actions';
 
 export default function DestinationForm({ initialData }: { initialData?: any }) {
   const router = useRouter();
@@ -27,17 +27,14 @@ export default function DestinationForm({ initialData }: { initialData?: any }) 
       slug: formData.slug.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
     };
 
-    let result;
-    if (initialData?.id) {
-      result = await supabase.from('destinations').update(payload).eq('id', initialData.id);
-    } else {
-      result = await supabase.from('destinations').insert([payload]);
-    }
+    const result = initialData?.id
+      ? await updateRecord('destinations', initialData.id, payload)
+      : await createRecord('destinations', payload);
 
     setLoading(false);
 
     if (result.error) {
-      setError(result.error.message);
+      setError(result.error);
     } else {
       router.push('/admin/destinations');
       router.refresh();

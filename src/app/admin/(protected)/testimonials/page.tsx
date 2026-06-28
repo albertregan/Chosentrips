@@ -1,36 +1,41 @@
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAdmin } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 
 export const revalidate = 0;
 
 export default async function AdminTestimonialsPage() {
-  const { data: testimonials } = await supabase.from('testimonials').select('*').order('created_at', { ascending: false });
+  await requireAdmin();
+  const { data: testimonials } = await supabaseAdmin.from('testimonials').select('*').order('created_at', { ascending: false });
 
   async function togglePublish(formData: FormData) {
     'use server'
+    await requireAdmin();
     const id = formData.get('id') as string;
     const is_published = formData.get('is_published') === 'true';
-    await supabase.from('testimonials').update({ is_published: !is_published }).eq('id', id);
+    await supabaseAdmin.from('testimonials').update({ is_published: !is_published }).eq('id', id);
     revalidatePath('/admin/testimonials');
     revalidatePath('/');
   }
 
   async function deleteTestimonial(formData: FormData) {
     'use server'
+    await requireAdmin();
     const id = formData.get('id') as string;
-    await supabase.from('testimonials').delete().eq('id', id);
+    await supabaseAdmin.from('testimonials').delete().eq('id', id);
     revalidatePath('/admin/testimonials');
     revalidatePath('/');
   }
 
   async function addTestimonial(formData: FormData) {
     'use server'
+    await requireAdmin();
     const guest_name = formData.get('guest_name') as string;
     const destination = formData.get('destination') as string;
     const review_content = formData.get('review_content') as string;
     const rating = parseInt(formData.get('rating') as string) || 5;
-    
-    await supabase.from('testimonials').insert([{ guest_name, destination, review_content, rating, is_published: true }]);
+
+    await supabaseAdmin.from('testimonials').insert([{ guest_name, destination, review_content, rating, is_published: true }]);
     revalidatePath('/admin/testimonials');
     revalidatePath('/');
   }

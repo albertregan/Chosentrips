@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { updateRecord } from '@/app/admin/cms-actions';
 
 export default function PageForm({ initialData }: { initialData: any }) {
   const router = useRouter();
@@ -19,15 +19,16 @@ export default function PageForm({ initialData }: { initialData: any }) {
     setLoading(true);
     setError('');
 
-    const { error: updateError } = await supabase
-      .from('pages')
-      .update({ title: formData.title, content: formData.content, updated_at: new Date().toISOString() })
-      .eq('id', initialData.id);
+    const result = await updateRecord('pages', initialData.id, {
+      title: formData.title,
+      content: formData.content,
+      updated_at: new Date().toISOString(),
+    });
 
     setLoading(false);
 
-    if (updateError) {
-      setError(updateError.message);
+    if (result.error) {
+      setError(result.error);
     } else {
       router.push('/admin/pages');
       router.refresh();

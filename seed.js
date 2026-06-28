@@ -1,7 +1,16 @@
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = 'https://ilxukfxhhmtghnxcchom.supabase.co/';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlseHVrZnhoaG10Z2hueGNjaG9tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1MTI5NzQsImV4cCI6MjA5NzA4ODk3NH0.SqZLzATczwQLgE3cRfxxwyXv3c7CyMVB1QAz4p_mcwA';
+// Credentials are read from the environment — never hardcode keys in source.
+// Use the service-role key so seeding works once RLS is enabled:
+//   SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node seed.js
+const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables.');
+  process.exit(1);
+}
+
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const packages = [

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
 
 export default function EnquiryForm({ packageId, packageName, isModal, onSuccess }: { packageId?: string, packageName?: string, isModal?: boolean, onSuccess?: () => void }) {
   const [step, setStep] = useState(1);
@@ -73,17 +72,22 @@ export default function EnquiryForm({ packageId, packageName, isModal, onSuccess
       customer_type: formData.customer_type
     };
 
-    const { error: submitError } = await supabase.from('leads').insert([submissionData]);
-
-    setLoading(false);
-    if (submitError) {
-      console.error(submitError);
-      setError('There was an error submitting your enquiry. Please try again.');
-    } else {
+    try {
+      const res = await fetch('/api/enquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submissionData)
+      });
+      if (!res.ok) throw new Error('Submission failed');
       setSuccess(true);
       if (onSuccess) {
         setTimeout(onSuccess, 3000); // Close modal after 3 seconds on success
       }
+    } catch (err) {
+      console.error(err);
+      setError('There was an error submitting your enquiry. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 

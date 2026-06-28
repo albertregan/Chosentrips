@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { createRecord, updateRecord } from '@/app/admin/cms-actions';
 
 type PackageInitialData = {
   id?: string;
@@ -82,16 +83,14 @@ export default function PackageForm({ initialData }: { initialData?: PackageInit
       price: parseFloat(formData.price as string) || 0
     };
 
-    let resultError;
+    let result;
 
     if (isEditing) {
-      const { error } = await supabase.from('packages').update(payload).eq('id', initialData.id);
-      resultError = error;
+      result = await updateRecord('packages', initialData.id!, payload);
     } else {
-      const { error, data } = await supabase.from('packages').insert([payload]).select('id').single();
-      resultError = error;
-      if (!error && data?.id) {
-        router.push(`/admin/packages/edit/${data.id}`);
+      result = await createRecord('packages', payload);
+      if (!result.error && result.id) {
+        router.push(`/admin/packages/edit/${result.id}`);
         router.refresh();
         return;
       }
@@ -99,8 +98,8 @@ export default function PackageForm({ initialData }: { initialData?: PackageInit
 
     setLoading(false);
 
-    if (resultError) {
-      setError(resultError.message);
+    if (result.error) {
+      setError(result.error);
     } else {
       router.push('/admin/packages');
       router.refresh();

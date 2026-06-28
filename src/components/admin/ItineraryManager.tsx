@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { createRecord, deleteRecord } from '@/app/admin/cms-actions';
 
 export default function ItineraryManager({ packageId }: { packageId: string }) {
   const [itineraries, setItineraries] = useState<any[]>([]);
@@ -40,25 +41,25 @@ export default function ItineraryManager({ packageId }: { packageId: string }) {
     e.preventDefault();
     setAdding(true);
     
-    const { error } = await supabase.from('itineraries').insert([{
+    const result = await createRecord('itineraries', {
       package_id: packageId,
       day_number: formData.day_number,
       title: formData.title,
       description: formData.description
-    }]);
+    });
 
-    if (!error) {
+    if (!result.error) {
       setFormData({ day_number: formData.day_number + 1, title: '', description: '' });
       fetchItineraries();
     } else {
-      alert(error.message);
+      alert(result.error);
     }
     setAdding(false);
   };
 
   const handleDelete = async (id: string) => {
     if (confirm('Delete this day?')) {
-      await supabase.from('itineraries').delete().eq('id', id);
+      await deleteRecord('itineraries', id);
       fetchItineraries();
     }
   };

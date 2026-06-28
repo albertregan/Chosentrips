@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { createRecord, deleteRecord } from '@/app/admin/cms-actions';
 
 export default function HotelManager({ packageId }: { packageId: string }) {
   const [hotels, setHotels] = useState<any[]>([]);
@@ -36,25 +37,25 @@ export default function HotelManager({ packageId }: { packageId: string }) {
     e.preventDefault();
     setAdding(true);
     
-    const { error } = await supabase.from('hotels').insert([{
+    const result = await createRecord('hotels', {
       package_id: packageId,
       star_rating: formData.star_rating,
       name: formData.name,
       description: formData.description
-    }]);
+    });
 
-    if (!error) {
+    if (!result.error) {
       setFormData({ star_rating: 4, name: '', description: '' });
       fetchHotels();
     } else {
-      alert(error.message);
+      alert(result.error);
     }
     setAdding(false);
   };
 
   const handleDelete = async (id: string) => {
     if (confirm('Delete this hotel option?')) {
-      await supabase.from('hotels').delete().eq('id', id);
+      await deleteRecord('hotels', id);
       fetchHotels();
     }
   };

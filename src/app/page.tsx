@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
+import NewsletterForm from '@/components/NewsletterForm';
 
 export const revalidate = 0;
 
@@ -14,7 +16,7 @@ export default async function Home() {
       <section className="relative h-screen min-h-[700px] flex items-center">
         <div className="absolute inset-0 z-0 overflow-hidden">
           <div className="absolute inset-0 hero-gradient z-10"></div>
-          <img alt="Santorini Sunset" className="w-full h-full object-cover scale-105" src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=2560&q=80" />
+          <Image alt="Santorini Sunset" fill priority sizes="100vw" className="object-cover scale-105" src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=2560&q=80" />
         </div>
         <div className="relative z-20 w-full px-margin-desktop max-w-container-max mx-auto text-center md:text-left">
           <h1 className="text-white font-display-xl text-[60px] leading-[72px] font-bold max-w-3xl mb-8 leading-tight">
@@ -46,7 +48,7 @@ export default async function Home() {
           {featuredPackages && featuredPackages.length > 0 ? featuredPackages.map((pkg: any) => (
             <div key={pkg.id} className="group luxury-shadow rounded-xl overflow-hidden bg-white transition-soft hover:-translate-y-2">
               <div className="relative aspect-[16/9] overflow-hidden">
-                <img alt={pkg.title} className="w-full h-full object-cover transition-soft group-hover:scale-110" src={pkg.image_url || 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=80'} />
+                <Image alt={pkg.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-soft group-hover:scale-110" src={pkg.image_url || 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=80'} />
               </div>
               <div className="p-6">
                 <h3 className="font-headline-md text-[24px] font-semibold text-primary mb-1">{pkg.title}</h3>
@@ -87,7 +89,7 @@ export default async function Home() {
             {weekendPackages && weekendPackages.length > 0 ? weekendPackages.map((pkg: any) => (
               <div key={pkg.id} className="group luxury-shadow rounded-xl overflow-hidden bg-white transition-soft hover:-translate-y-2">
                 <div className="relative aspect-[16/9] overflow-hidden">
-                  <img alt={pkg.title} className="w-full h-full object-cover transition-soft group-hover:scale-110" src={pkg.image_url || 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=80'} />
+                  <Image alt={pkg.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-soft group-hover:scale-110" src={pkg.image_url || 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=80'} />
                   {pkg.departure_city && (
                     <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-primary uppercase tracking-wider">
                       Ex {pkg.departure_city}
@@ -174,13 +176,10 @@ export default async function Home() {
           <div className="z-10 flex-1 text-center md:text-left">
             <span className="text-secondary font-bold uppercase tracking-widest text-label-sm mb-4 block">Newsletter</span>
             <h2 className="font-headline-lg text-[40px] font-bold text-primary mb-6">Receive Curated Travel Inspiration</h2>
-            <p className="text-on-surface-variant text-body-lg max-w-md mx-auto md:mx-0">Join 50,000+ luxury travelers who receive our monthly hand-picked destination guides.</p>
+            <p className="text-on-surface-variant text-body-lg max-w-md mx-auto md:mx-0">Join our community of luxury travelers who receive our monthly hand-picked destination guides.</p>
           </div>
           <div className="z-10 w-full md:w-auto">
-            <div className="flex flex-col sm:flex-row gap-4 p-2 bg-white rounded-xl luxury-shadow">
-              <input className="flex-1 border-none outline-none focus:ring-0 text-primary font-medium px-4 min-w-[250px]" placeholder="Your email address" type="email" />
-              <button className="bg-primary text-on-primary px-8 py-4 rounded-lg font-bold whitespace-nowrap hover:bg-opacity-90 transition-all">Subscribe Now</button>
-            </div>
+            <NewsletterForm />
           </div>
           <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-secondary-container/20 rounded-full blur-3xl"></div>
         </div>

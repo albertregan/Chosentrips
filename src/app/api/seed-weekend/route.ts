@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { isAuthenticated } from '@/lib/auth';
 
 export async function GET(request: Request) {
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     const packages = [
       {
@@ -76,7 +80,7 @@ export async function GET(request: Request) {
       }
     ];
 
-    const { error } = await supabase.from('packages').insert(packages);
+    const { error } = await supabaseAdmin.from('packages').insert(packages);
 
     if (error) {
       console.error('Seed error:', error);

@@ -1,9 +1,11 @@
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAdmin } from '@/lib/auth';
 
 export const revalidate = 0;
 
 export default async function LeadsPage() {
-  const { data: leads } = await supabase
+  await requireAdmin();
+  const { data: leads } = await supabaseAdmin
     .from('leads')
     .select('*, packages(title)')
     .order('created_at', { ascending: false });
@@ -66,7 +68,7 @@ export default async function LeadsPage() {
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="p-8 text-center text-on-surface-variant italic">
+                <td colSpan={6} className="p-8 text-center text-on-surface-variant italic">
                   No leads found.
                 </td>
               </tr>

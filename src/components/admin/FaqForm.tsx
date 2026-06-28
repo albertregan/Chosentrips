@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { createRecord, updateRecord } from '@/app/admin/cms-actions';
 
 export default function FaqForm({ initialData }: { initialData?: any }) {
   const router = useRouter();
@@ -20,19 +20,14 @@ export default function FaqForm({ initialData }: { initialData?: any }) {
     setLoading(true);
     setError('');
 
-    let resultError;
-    if (initialData?.id) {
-      const { error } = await supabase.from('faqs').update(formData).eq('id', initialData.id);
-      resultError = error;
-    } else {
-      const { error } = await supabase.from('faqs').insert([formData]);
-      resultError = error;
-    }
+    const result = initialData?.id
+      ? await updateRecord('faqs', initialData.id, formData)
+      : await createRecord('faqs', formData);
 
     setLoading(false);
 
-    if (resultError) {
-      setError(resultError.message);
+    if (result.error) {
+      setError(result.error);
     } else {
       router.push('/admin/faqs');
       router.refresh();

@@ -1,11 +1,13 @@
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAdmin } from '@/lib/auth';
 
 export const revalidate = 0; // Disable cache for dashboard
 
 export default async function DashboardPage() {
+  await requireAdmin();
   // Fetch some stats
-  const { count: leadsCount } = await supabase.from('leads').select('*', { count: 'exact', head: true });
-  const { count: packagesCount } = await supabase.from('packages').select('*', { count: 'exact', head: true });
+  const { count: leadsCount } = await supabaseAdmin.from('leads').select('*', { count: 'exact', head: true });
+  const { count: packagesCount } = await supabaseAdmin.from('packages').select('*', { count: 'exact', head: true });
 
   return (
     <div>
